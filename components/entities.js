@@ -1,5 +1,6 @@
 export default {
 	EMPTY: '🌫',
 	BOMB: '💣',
-	ENEMY: '👾'
+	ENEMY: '👾',
+	EXPLOSION: '💥'
 };

@@ -3,7 +3,13 @@ import actions from './actions.js';
 
 export const advanceRound = (state, action) => {
 	if (action.type === actions.WAIT) {
-		return addEnemies(addRound(tickBombs(moveEnemies({ ...state }))));
+		return addEnemies(
+			addRound(
+				explodeBombs(
+					tickBombs(moveEnemies(cleanUpExplosions({ ...state })))
+				)
+			)
+		);
 	} else if (action.type === actions.DROP_ITEM) {
 		return addBomb(state, action.position);
 	}
@@ -48,6 +54,42 @@ function tickBombs(state) {
 	for (let i = 0; i < s.board.length; i++) {
 		if (s.board[i].occupant === entities.BOMB) {
 			s.board[i].timer--;
+		}
+	}
+	return s;
+}
+
+function explodeBombs(state) {
+	const s = { ...state };
+	for (let i = 0; i < s.board.length; i++) {
+		if (s.board[i].occupant === entities.BOMB && s.board[i].timer === 0) {
+			s.board[i] = { occupant: entities.EXPLOSION };
+			// has tile to the right
+			if ((i + 1) % s.boardWidth !== 0) {
+				s.board[i + 1] = { occupant: entities.EXPLOSION };
+			}
+			// has tile to the left
+			if ((i - 1) % s.boardWidth !== s.boardWidth - 1) {
+				s.board[i - 1] = { occupant: entities.EXPLOSION };
+			}
+			// has tile to the top
+			if (i - s.boardWidth >= 0) {
+				s.board[i - s.boardWidth] = { occupant: entities.EXPLOSION };
+			}
+			// has tile to the bottom
+			if (i + s.boardWidth <= s.board.length - 1) {
+				s.board[i + s.boardWidth] = { occupant: entities.EXPLOSION };
+			}
+		}
+	}
+	return s;
+}
+
+function cleanUpExplosions(state) {
+	const s = { ...state };
+	for (let i = 0; i < s.board.length; i++) {
+		if (s.board[i].occupant === entities.EXPLOSION) {
+			s.board[i] = { occupant: entities.EMPTY };
 		}
 	}
 	return s;
