@@ -46,6 +46,15 @@ function addEnemies(state) {
 
 function addBomb(state, cell) {
 	const s = { ...state };
+
+	const bombCount = s.board.filter(val => val.occupant === entities.BOMB)
+		.length;
+
+	if (bombCount >= 3) {
+		alert('No more than 3 Bombs');
+		return s;
+	}
+
 	if (s.board[cell].occupant === entities.EMPTY) {
 		s.board[cell] = { occupant: entities.BOMB, timer: 3 };
 	}

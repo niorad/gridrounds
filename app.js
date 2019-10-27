@@ -45,10 +45,9 @@ class App extends LitElement {
 				display: grid;
 				grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 				grid-gap: 5px;
-				width: 400px;
+				width: 100%;
 			}
 			li {
-				background: rgba(255, 255, 255, 0.5);
 				text-align: center;
 				position: relative;
 			}
@@ -60,7 +59,7 @@ class App extends LitElement {
 			}
 			li button {
 				font-size: 3rem;
-				padding: 4px 10px;
+				width: 100%;
 			}
 			button {
 				font-family: 'Microsoft Sans Serif';
@@ -71,9 +70,14 @@ class App extends LitElement {
 				border-style: solid;
 				border-color: #ffffff #808080 #808080 #ffffff;
 			}
+			.fat-button {
+				width: 100%;
+				padding: 10px;
+			}
 			hr {
 				border-top-color: #808080;
 				border-bottom-color: #ffffff;
+				margin-bottom: 1rem;
 			}
 		`;
 	}
@@ -100,6 +104,7 @@ class App extends LitElement {
 			</ul>
 			<hr />
 			<button
+				class="fat-button"
 				@click=${() => {
 					this.onAdvanceRound({ type: actions.WAIT });
 				}}
