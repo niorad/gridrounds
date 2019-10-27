@@ -1,4 +1,4 @@
-import { LitElement, html, css } from '../vendor/LitElement.js';
+import { LitElement, html, css } from './vendor/LitElement.js';
 import { getFreshState, advanceRound } from './components/state.js';
 import entities from './components/entities.js';
 import actions from './components/actions.js';
@@ -24,9 +24,7 @@ class App extends LitElement {
 		e.dataTransfer.setData('text/plain', entities.BOMB);
 	}
 
-	onCellDrop(e, position) {
-		e.preventDefault();
-		console.log('Droppin: ', e.dataTransfer.getData('text/plain'), e);
+	onFieldClicked(position) {
 		this.onAdvanceRound({
 			type: actions.DROP_ITEM,
 			entity: entities.BOMB,
@@ -51,16 +49,31 @@ class App extends LitElement {
 			}
 			li {
 				background: rgba(255, 255, 255, 0.5);
-				padding: 3px;
 				text-align: center;
-				font-size: 3rem;
 				position: relative;
 			}
 			li small {
 				font-size: 12px;
 				position: absolute;
-				right: 0;
-				bottom: 0;
+				right: 5px;
+				bottom: 3px;
+			}
+			li button {
+				font-size: 3rem;
+				padding: 4px 10px;
+			}
+			button {
+				font-family: 'Microsoft Sans Serif';
+				font-size: 13px;
+				outline: 1px solid #000000;
+				background: #c0c0c0;
+				border-width: 1px;
+				border-style: solid;
+				border-color: #ffffff #808080 #808080 #ffffff;
+			}
+			hr {
+				border-top-color: #808080;
+				border-bottom-color: #ffffff;
 			}
 		`;
 	}
@@ -68,31 +81,23 @@ class App extends LitElement {
 	render() {
 		console.log(this.state);
 		return html`
+			Round: ${this.state.round} Lives: ${this.state.lives}
 			<ul>
 				${this.state.board.map((cell, index) => {
 					return html`
-						<li
-							@dragover=${e => {
-								e.preventDefault();
-							}}
-							@drop=${e => {
-								this.onCellDrop(e, index);
-							}}
-						>
-							${cell.occupant}
+						<li>
+							<button
+								@click=${e => {
+									this.onFieldClicked(index);
+								}}
+							>
+								${cell.occupant}
+							</button>
 							<small>${cell.timer}</small>
 						</li>
 					`;
 				})}
 			</ul>
-			<hr />
-			<div
-				draggable="true"
-				data-item-type=${entities.BOMB}
-				@dragstart=${this.onItemDrag}
-			>
-				💣
-			</div>
 			<hr />
 			<button
 				@click=${() => {
@@ -101,7 +106,6 @@ class App extends LitElement {
 			>
 				Advance
 			</button>
-			Round: ${this.state.round}
 		`;
 	}
 }
