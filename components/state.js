@@ -135,7 +135,7 @@ function addRound(state) {
 }
 
 export const getFreshState = () => {
-	const boardWidth = 6;
+	const boardWidth = 5;
 	const boardHeight = 6;
 	return {
 		round: 0,

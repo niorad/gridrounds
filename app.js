@@ -34,14 +34,9 @@ class App extends LitElement {
 
 	static get styles() {
 		return css`
-			[draggable] {
-				font-size: 3rem;
-				border: 1px dotted black;
-				display: inline-block;
-			}
 			main {
 				background: rgb(206, 208, 207);
-				max-width: 500px;
+				max-width: 400px;
 				margin: auto;
 				margin-top: 2rem;
 				padding: 2px;
@@ -67,13 +62,14 @@ class App extends LitElement {
 			h1 {
 				color: white;
 				font-size: 13px;
+				font-weight: bold;
 				margin: 0 2px 0 0;
+				letter-spacing: -1px;
 				background-image: linear-gradient(
 					to right,
 					rgb(0, 0, 128),
 					rgb(16, 52, 166)
 				);
-				text-align: center;
 				padding: 5px;
 			}
 			.content {
@@ -83,8 +79,9 @@ class App extends LitElement {
 				list-style: none outside none;
 				padding: 0;
 				display: grid;
-				grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+				grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 				width: 100%;
+				grid-gap: 1px;
 			}
 			li {
 				text-align: center;
@@ -98,8 +95,10 @@ class App extends LitElement {
 			}
 			li button {
 				font-size: 3rem;
-				width: 100%;
 				margin: 0;
+				width: 100%;
+				max-width: 100%;
+				padding: 0;
 			}
 			button {
 				font-family: 'Microsoft Sans Serif', sans-serif;
@@ -119,16 +118,32 @@ class App extends LitElement {
 				border-bottom-color: #ffffff;
 				margin-bottom: 1rem;
 			}
+			.status {
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-center;
+			}
 		`;
 	}
 
 	render() {
 		console.log(this.state);
+		const bombCount = this.state.board.filter(
+			val => val.occupant === entities.BOMB
+		).length;
+
 		return html`
 			<main>
-				<h1>GRIDROUNDS</h1>
+				<h1>gridrounds.exe</h1>
 				<div class="content">
-					Round: ${this.state.round} Lives: ${this.state.lives}
+					<div class="status">
+						<div>
+							⏳ ${this.state.round} 🖤 ${this.state.lives}
+						</div>
+						<div>
+							${entities.BOMB.repeat(3 - bombCount)}
+						</div>
+					</div>
 					<ul>
 						${this.state.board.map((cell, index) => {
 							return html`
@@ -145,14 +160,13 @@ class App extends LitElement {
 							`;
 						})}
 					</ul>
-					<hr />
 					<button
 						class="fat-button"
 						@click=${() => {
 							this.onAdvanceRound({ type: actions.WAIT });
 						}}
 					>
-						Advance
+						Next Round
 					</button>
 				</div>
 			</main>
