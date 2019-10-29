@@ -108,6 +108,7 @@ class App extends LitElement {
 				border-width: 1px;
 				border-style: solid;
 				border-color: #ffffff #808080 #808080 #ffffff;
+				cursor: url(win95mouse.png), auto;
 			}
 			.fat-button {
 				width: 100%;
