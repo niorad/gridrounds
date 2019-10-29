@@ -83,18 +83,22 @@ function checkIfLost(state) {
 function explodeBombs(state) {
 	const s = { ...state };
 	for (let i = 0; i < s.board.length; i++) {
-		if (s.board[i].occupant === entities.BOMB && s.board[i].timer === 0) {
+		if (s.board[i].occupant === entities.BOMB && s.board[i].timer <= 0) {
 			s.board[i] = { occupant: entities.EXPLOSION };
 			// has tile to the right
 			if ((i + 1) % s.boardWidth !== 0) {
 				if (s.board[i + 1].occupant !== entities.BOMB) {
 					s.board[i + 1] = { occupant: entities.EXPLOSION };
+				} else {
+					s.board[i + 1].timer = -1;
 				}
 			}
 			// has tile to the left
 			if ((i - 1) % s.boardWidth !== s.boardWidth - 1) {
 				if (s.board[i - 1].occupant !== entities.BOMB) {
 					s.board[i - 1] = { occupant: entities.EXPLOSION };
+				} else {
+					s.board[i - 1].timer = -1;
 				}
 			}
 			// has tile to the top
@@ -103,6 +107,8 @@ function explodeBombs(state) {
 					s.board[i - s.boardWidth] = {
 						occupant: entities.EXPLOSION
 					};
+				} else {
+					s.board[i - s.boardWidth].timer = -1;
 				}
 			}
 			// has tile to the bottom
@@ -111,8 +117,12 @@ function explodeBombs(state) {
 					s.board[i + s.boardWidth] = {
 						occupant: entities.EXPLOSION
 					};
+				} else {
+					s.board[i + s.boardWidth].timer = -1;
 				}
 			}
+			// if bomb found, start from beginning to explode all bombs
+			i = 0;
 		}
 	}
 	return s;
