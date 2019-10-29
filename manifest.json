@@ -2,7 +2,7 @@
 	"name": "GridRounds",
 	"short_name": "GridRounds",
 	"description": "It's a game, in a way.",
-	"start_url": "/gridrounds/",
+	"start_url": "/gridrounds",
 	"display": "standalone",
 	"theme_color": "#008080",
 	"background_color": "#008080",

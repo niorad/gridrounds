@@ -12,4 +12,10 @@
 <gridrounds-app></gridrounds-app>
 </div>
 <script type="module" src="./app.js"></script>
+
+<script>
+	if (navigator.serviceWorker && !navigator.serviceWorker.controller) { navigator.serviceWorker.register('/serviceworker.js'); }
+</script>
+
+
 </body>
