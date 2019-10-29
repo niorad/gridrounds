@@ -138,10 +138,13 @@ class App extends LitElement {
 				<h1>gridrounds.exe</h1>
 				<div class="content">
 					<div class="status">
-						<div>
-							⏳ ${this.state.round} 🖤 ${this.state.lives}
+						<div class="status-item">
+							⏳ ${this.state.round}
 						</div>
-						<div>
+						<div class="status-item">
+							${'❤️'.repeat(this.state.lives)}
+						</div>
+						<div class="status-item">
 							${entities.BOMB.repeat(3 - bombCount)}
 						</div>
 					</div>

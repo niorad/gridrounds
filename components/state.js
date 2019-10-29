@@ -36,11 +36,11 @@ function moveEnemies(state) {
 
 function addEnemies(state) {
 	const s = { ...state };
-	if (s.round % 2 === 1) {
-		s.board[Math.floor(Math.random() * s.boardWidth)] = {
-			occupant: entities.ENEMY
-		};
-	}
+	// if (s.round % 2 === 1) {
+	s.board[Math.floor(Math.random() * s.boardWidth)] = {
+		occupant: entities.ENEMY
+	};
+	// }
 	return s;
 }
 
@@ -146,10 +146,10 @@ function addRound(state) {
 
 export const getFreshState = () => {
 	const boardWidth = 5;
-	const boardHeight = 6;
+	const boardHeight = 5;
 	return {
 		round: 0,
-		lives: 5,
+		lives: 3,
 		boardWidth,
 		boardHeight,
 		board: Array(boardWidth * boardHeight).fill({
