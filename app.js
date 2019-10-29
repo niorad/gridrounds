@@ -64,7 +64,6 @@ class App extends LitElement {
 				font-size: 13px;
 				font-weight: bold;
 				margin: 0 2px 0 0;
-				letter-spacing: -1px;
 				background-image: linear-gradient(
 					to right,
 					rgb(0, 0, 128),
