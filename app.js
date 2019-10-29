@@ -80,11 +80,12 @@ class App extends LitElement {
 				display: grid;
 				grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 				width: 100%;
-				grid-gap: 1px;
+				grid-gap: 5px;
 			}
 			li {
 				text-align: center;
 				position: relative;
+				border: 1px solid rgba(0, 0, 0, 0.2);
 			}
 			li small {
 				font-size: 12px;
@@ -98,6 +99,11 @@ class App extends LitElement {
 				width: 100%;
 				max-width: 100%;
 				padding: 0;
+			}
+			li button[disabled] {
+				color: black;
+				outline: none;
+				border-color: transparent;
 			}
 			button {
 				font-family: 'Microsoft Sans Serif', sans-serif;
@@ -152,6 +158,8 @@ class App extends LitElement {
 							return html`
 								<li>
 									<button
+										?disabled=${cell.occupant !==
+											entities.EMPTY || bombCount === 3}
 										@click=${e => {
 											this.onFieldClicked(index);
 										}}
