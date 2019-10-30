@@ -14,6 +14,8 @@ export const advanceRound = (state, action) => {
 		);
 	} else if (action.type === actions.DROP_ITEM) {
 		return addBomb(state, action.position);
+	} else if (action.type === actions.NEW_GAME) {
+		return getFreshState(action.boardWidth, action.boardHeight);
 	}
 	return state;
 };
@@ -144,9 +146,7 @@ function addRound(state) {
 	return s;
 }
 
-export const getFreshState = () => {
-	const boardWidth = 5;
-	const boardHeight = 5;
+export const getFreshState = (boardWidth = 5, boardHeight = 5) => {
 	return {
 		round: 0,
 		lives: 3,

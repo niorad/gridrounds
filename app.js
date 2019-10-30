@@ -133,6 +133,14 @@ class App extends LitElement {
 				text-align: center;
 				flex: 1;
 			}
+			.menu {
+				display: flex;
+				padding-top: 1rem;
+				justify-content: stretch;
+			}
+			.menu > * {
+				flex: 1;
+			}
 		`;
 	}
 
@@ -192,6 +200,41 @@ class App extends LitElement {
 					>
 						Next Round
 					</button>
+					<div class="menu">
+						<button
+							@click=${() => {
+								this.onAdvanceRound({
+									type: actions.NEW_GAME,
+									boardWidth: 4,
+									boardHeight: 5
+								});
+							}}
+						>
+							New 4x5
+						</button>
+						<button
+							@click=${() => {
+								this.onAdvanceRound({
+									type: actions.NEW_GAME,
+									boardWidth: 5,
+									boardHeight: 5
+								});
+							}}
+						>
+							New 5x5
+						</button>
+						<button
+							@click=${() => {
+								this.onAdvanceRound({
+									type: actions.NEW_GAME,
+									boardWidth: 6,
+									boardHeight: 5
+								});
+							}}
+						>
+							New 6x5
+						</button>
+					</div>
 				</div>
 			</main>
 		`;
