@@ -150,6 +150,7 @@ export const getFreshState = () => {
 	return {
 		round: 0,
 		lives: 3,
+		roundsToSurvive: 30,
 		boardWidth,
 		boardHeight,
 		board: Array(boardWidth * boardHeight).fill({

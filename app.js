@@ -78,7 +78,6 @@ class App extends LitElement {
 				list-style: none outside none;
 				padding: 0;
 				display: grid;
-				grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 				width: 100%;
 				grid-gap: 5px;
 			}
@@ -117,6 +116,7 @@ class App extends LitElement {
 			}
 			.fat-button {
 				width: 100%;
+				margin-top: 1rem;
 				padding: 10px;
 			}
 			hr {
@@ -129,6 +129,10 @@ class App extends LitElement {
 				justify-content: space-between;
 				align-items: flex-center;
 			}
+			.status-item {
+				text-align: center;
+				flex: 1;
+			}
 		`;
 	}
 
@@ -140,20 +144,24 @@ class App extends LitElement {
 
 		return html`
 			<main>
-				<h1>gridrounds.exe</h1>
+				<h1>
+					gridrounds.exe —
+					${this.state.boardWidth}x${this.state.boardHeight}
+				</h1>
 				<div class="content">
 					<div class="status">
 						<div class="status-item">
-							⏳ ${this.state.round}
-						</div>
-						<div class="status-item">
-							${'❤️'.repeat(this.state.lives)}
+							⏳ ${this.state.roundsToSurvive - this.state.round}
 						</div>
 						<div class="status-item">
 							${entities.BOMB.repeat(3 - bombCount)}
 						</div>
 					</div>
-					<ul>
+					<ul
+						style="grid-template-columns: ${'1fr '.repeat(
+							this.state.boardWidth
+						)}"
+					>
 						${this.state.board.map((cell, index) => {
 							return html`
 								<li>
@@ -171,6 +179,11 @@ class App extends LitElement {
 							`;
 						})}
 					</ul>
+					<div class="status">
+						<div class="status-item">
+							${'🏠️'.repeat(this.state.lives)}
+						</div>
+					</div>
 					<button
 						class="fat-button"
 						@click=${() => {
