@@ -150,6 +150,7 @@ class App extends LitElement {
 			}
 			.menu {
 				display: flex;
+				flex-wrap: wrap;
 				padding-top: 1rem;
 				justify-content: flex-start;
 				align-items: center;
