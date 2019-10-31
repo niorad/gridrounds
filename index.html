@@ -1,23 +1,29 @@
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-	<link rel="apple-touch-icon" href="icon-512x512.png">
-	<link rel="manifest" href="manifest.json">
+<!doctype html>
+	<head>
+		<title>Gridrounds</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="theme-color" content="#396da5">
+		<link rel="apple-touch-icon" href="icon-512x512.png">
+		<link rel="manifest" href="manifest.json">
+	</head>
+	<body>
+		<style>
+			* {box-sizing: border-box; cursor: url(win95mouse.png), auto;} body {background: #396da5; font-family: 'Microsoft Sans Serif', sans-serif;font-size:13px;}
+		</style>
+		<div id="app">
+			<gridrounds-app></gridrounds-app>
+		</div>
 
-</head>
-<body>
-<style>
-	* {box-sizing: border-box; cursor: url(win95mouse.png), auto;} body {background: rgb(0, 128, 128); font-family: 'Microsoft Sans Serif', sans-serif;font-size:13px;}
-</style>
-<div id="app">
-<gridrounds-app></gridrounds-app>
-</div>
-<script type="module" src="./app.js"></script>
+		<script type="module" src="./app.js"></script>
 
-<script>
-	if (navigator.serviceWorker && !navigator.serviceWorker.controller) { navigator.serviceWorker.register('./serviceworker.js'); }
-</script>
+		<script>
+			if (navigator.serviceWorker && !navigator.serviceWorker.controller) { navigator.serviceWorker.register('./serviceworker.js'); }
+		</script>
 
-
-</body>
+		<script id="__bs_script__">//<![CDATA[
+    document.write("<script async src='http://localhost:3000/browser-sync/browser-sync-client.js?v=2.26.7'><\/script>".replace("HOST", location.hostname));
+//]]></script>
+	</body>
+</html>

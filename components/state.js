@@ -1,5 +1,6 @@
 import entities from './entities.js';
 import actions from './actions.js';
+import gameStates from './gamestates.js';
 
 export const advanceRound = (state, action) => {
 	if (action.type === actions.WAIT) {
@@ -151,6 +152,7 @@ export const getFreshState = (boardWidth = 5, boardHeight = 5) => {
 		round: 0,
 		lives: 3,
 		roundsToSurvive: 30,
+		gameState: gameStates.PRISTINE,
 		boardWidth,
 		boardHeight,
 		board: Array(boardWidth * boardHeight).fill({

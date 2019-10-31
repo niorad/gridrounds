@@ -7,11 +7,15 @@ class App extends LitElement {
 	constructor() {
 		super();
 		this.state = getFreshState();
+		this.newGameBoardWidth = 5;
+		this.newGameBoardHeight = 5;
 	}
 
 	static get properties() {
 		return {
-			state: { type: Object }
+			state: { type: Object },
+			newGameBoardWidth: { type: Number },
+			newGameBoardHeight: { type: Number }
 		};
 	}
 
@@ -35,7 +39,7 @@ class App extends LitElement {
 	static get styles() {
 		return css`
 			main {
-				background: rgb(206, 208, 207);
+				background: rgb(214, 211, 206);
 				max-width: 400px;
 				margin: auto;
 				margin-top: 2rem;
@@ -64,16 +68,13 @@ class App extends LitElement {
 				font-size: 13px;
 				font-weight: bold;
 				margin: 0 2px 0 0;
-				background-image: linear-gradient(
-					to right,
-					rgb(0, 0, 128),
-					rgb(16, 52, 166)
-				);
+				background-image: linear-gradient(to right, #102b73, #a5cbf7);
 				padding: 5px;
 			}
 			.content {
 				padding: 1rem;
 			}
+
 			ul {
 				list-style: none outside none;
 				padding: 0;
@@ -93,7 +94,7 @@ class App extends LitElement {
 				bottom: 3px;
 			}
 			li button {
-				font-size: 3rem;
+				font-size: 2.4rem;
 				margin: 0;
 				width: 100%;
 				max-width: 100%;
@@ -108,7 +109,7 @@ class App extends LitElement {
 				font-family: 'Microsoft Sans Serif', sans-serif;
 				font-size: 13px;
 				outline: 1px solid #000000;
-				background: rgb(206, 208, 207);
+				background: rgb(214, 211, 206);
 				border-width: 1px;
 				border-style: solid;
 				border-color: #ffffff #808080 #808080 #ffffff;
@@ -128,6 +129,7 @@ class App extends LitElement {
 				display: flex;
 				justify-content: space-between;
 				align-items: flex-center;
+				font-size: 2rem;
 			}
 			.status-item {
 				text-align: center;
@@ -136,10 +138,14 @@ class App extends LitElement {
 			.menu {
 				display: flex;
 				padding-top: 1rem;
-				justify-content: stretch;
+				justify-content: flex-start;
+				align-items: center;
+			}
+			input[type='number'] {
+				width: 30px;
 			}
 			.menu > * {
-				flex: 1;
+				margin-right: 5px;
 			}
 		`;
 	}
@@ -201,38 +207,34 @@ class App extends LitElement {
 						Next Round
 					</button>
 					<div class="menu">
+						<span>
+							New game:
+						</span>
+						<input
+							type="number"
+							@change=${e =>
+								(this.newGameBoardWidth = e.target.value)}
+							value=${this.newGameBoardWidth}
+						/>
+						<span>
+							x
+						</span>
+						<input
+							type="number"
+							value=${this.newGameBoardHeight}
+							@change=${e =>
+								(this.newGameBoardHeight = e.target.value)}
+						/>
 						<button
 							@click=${() => {
 								this.onAdvanceRound({
 									type: actions.NEW_GAME,
-									boardWidth: 4,
-									boardHeight: 5
+									boardWidth: this.newGameBoardWidth,
+									boardHeight: this.newGameBoardHeight
 								});
 							}}
 						>
-							New 4x5
-						</button>
-						<button
-							@click=${() => {
-								this.onAdvanceRound({
-									type: actions.NEW_GAME,
-									boardWidth: 5,
-									boardHeight: 5
-								});
-							}}
-						>
-							New 5x5
-						</button>
-						<button
-							@click=${() => {
-								this.onAdvanceRound({
-									type: actions.NEW_GAME,
-									boardWidth: 6,
-									boardHeight: 5
-								});
-							}}
-						>
-							New 6x5
+							New
 						</button>
 					</div>
 				</div>
