@@ -152,13 +152,16 @@ class App extends LitElement {
 				display: flex;
 				flex-wrap: wrap;
 				padding-top: 1rem;
-				justify-content: flex-start;
+				justify-content: flex-end;
 				align-items: center;
 				font-size: 1.2rem;
 			}
-			input[type='number'] {
+			input[type='text'] {
 				width: 25px;
-				font-size: 1rem;
+				font-size: 1.2rem;
+				background: transparent;
+				border: none;
+				text-align: center;
 			}
 			.menu > * {
 				margin-right: 5px;
@@ -240,7 +243,7 @@ class App extends LitElement {
 							↔️
 						</span>
 						<input
-							type="number"
+							type="text"
 							@change=${e =>
 								(this.newGameBoardWidth = e.target.value)}
 							value=${this.newGameBoardWidth}
@@ -249,7 +252,7 @@ class App extends LitElement {
 							↕️
 						</span>
 						<input
-							type="number"
+							type="text"
 							value=${this.newGameBoardHeight}
 							@change=${e =>
 								(this.newGameBoardHeight = e.target.value)}
@@ -258,7 +261,7 @@ class App extends LitElement {
 							💣
 						</span>
 						<input
-							type="number"
+							type="text"
 							value=${this.newGameBombs}
 							@change=${e => (this.newGameBombs = e.target.value)}
 						/>
@@ -266,7 +269,7 @@ class App extends LitElement {
 							🏠
 						</span>
 						<input
-							type="number"
+							type="text"
 							value=${this.newGameHitpoints}
 							@change=${e =>
 								(this.newGameHitpoints = e.target.value)}
@@ -275,7 +278,7 @@ class App extends LitElement {
 							👾
 						</span>
 						<input
-							type="number"
+							type="text"
 							value=${this.newGameEnemiesDelay}
 							@change=${e =>
 								(this.newGameEnemiesDelay = e.target.value)}
