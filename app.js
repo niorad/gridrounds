@@ -9,13 +9,19 @@ class App extends LitElement {
 		this.state = getFreshState();
 		this.newGameBoardWidth = 5;
 		this.newGameBoardHeight = 5;
+		this.newGameBombs = 3;
+		this.newGameHitpoints = 3;
+		this.newGameEnemiesDelay = 0;
 	}
 
 	static get properties() {
 		return {
 			state: { type: Object },
 			newGameBoardWidth: { type: Number },
-			newGameBoardHeight: { type: Number }
+			newGameBoardHeight: { type: Number },
+			newGameBombs: { type: Number },
+			newGameHitpoints: { type: Number },
+			newGameEnemiesDelay: { type: Number }
 		};
 	}
 
@@ -142,7 +148,7 @@ class App extends LitElement {
 				align-items: center;
 			}
 			input[type='number'] {
-				width: 30px;
+				width: 25px;
 			}
 			.menu > * {
 				margin-right: 5px;
@@ -208,7 +214,7 @@ class App extends LitElement {
 					</button>
 					<div class="menu">
 						<span>
-							New game:
+							W
 						</span>
 						<input
 							type="number"
@@ -217,7 +223,7 @@ class App extends LitElement {
 							value=${this.newGameBoardWidth}
 						/>
 						<span>
-							x
+							H
 						</span>
 						<input
 							type="number"
@@ -225,12 +231,35 @@ class App extends LitElement {
 							@change=${e =>
 								(this.newGameBoardHeight = e.target.value)}
 						/>
+						<span>
+							B
+						</span>
+						<input
+							type="number"
+							value=${this.newGameBombs}
+							@change=${e => (this.newGameBombs = e.target.value)}
+						/>
+						<span>
+							HP
+						</span>
+						<input
+							type="number"
+							value=${this.newGameHitpoints}
+							@change=${e =>
+								(this.newGameHitpoints = e.target.value)}
+						/>
 						<button
 							@click=${() => {
 								this.onAdvanceRound({
 									type: actions.NEW_GAME,
-									boardWidth: this.newGameBoardWidth,
-									boardHeight: this.newGameBoardHeight
+									boardWidth: parseInt(
+										this.newGameBoardWidth,
+										10
+									),
+									boardHeight: parseInt(
+										this.newGameBoardHeight,
+										10
+									)
 								});
 							}}
 						>
