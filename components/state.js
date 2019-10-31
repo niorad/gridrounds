@@ -20,6 +20,7 @@ export const advanceRound = (state, action) => {
 			action.boardWidth,
 			action.boardHeight,
 			action.bombs,
+			action.bombTimer,
 			action.lives,
 			action.enemiesDelay
 		);
@@ -64,7 +65,7 @@ function addBomb(state, cell) {
 	}
 
 	if (s.board[cell].occupant === entities.EMPTY) {
-		s.board[cell] = { occupant: entities.BOMB, timer: 3 };
+		s.board[cell] = { occupant: entities.BOMB, timer: s.bombTimer };
 	}
 	return s;
 }
@@ -155,20 +156,20 @@ export const getFreshState = (
 	boardWidth = 5,
 	boardHeight = 5,
 	bombs = 3,
+	bombTimer = 3,
 	lives = 3,
 	enemiesDelay = 1
-) => {
-	return {
-		round: 0,
-		lives,
-		bombs,
-		enemiesDelay,
-		roundsToSurvive: 30,
-		gameState: gameStates.PRISTINE,
-		boardWidth,
-		boardHeight,
-		board: Array(boardWidth * boardHeight).fill({
-			occupant: entities.EMPTY
-		})
-	};
-};
+) => ({
+	round: 0,
+	lives,
+	bombs,
+	enemiesDelay,
+	bombTimer,
+	roundsToSurvive: 30,
+	gameState: gameStates.PRISTINE,
+	boardWidth,
+	boardHeight,
+	board: Array(boardWidth * boardHeight).fill({
+		occupant: entities.EMPTY
+	})
+});

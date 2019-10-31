@@ -3,32 +3,17 @@ import { getFreshState, advanceRound } from './components/state.js';
 import entities from './components/entities.js';
 import actions from './components/actions.js';
 import gamestates from './components/gamestates.js';
+import './components/menu.js';
 
 class App extends LitElement {
 	constructor() {
 		super();
-		this.newGameBoardWidth = 5;
-		this.newGameBoardHeight = 5;
-		this.newGameBombs = 3;
-		this.newGameHitpoints = 3;
-		this.newGameEnemiesDelay = 1;
-		this.state = getFreshState(
-			this.newGameBoardWidth,
-			this.newGameBoardHeight,
-			this.newGameBombs,
-			this.newGameHitpoints,
-			this.newGameEnemiesDelay
-		);
+		this.state = getFreshState();
 	}
 
 	static get properties() {
 		return {
-			state: { type: Object },
-			newGameBoardWidth: { type: Number },
-			newGameBoardHeight: { type: Number },
-			newGameBombs: { type: Number },
-			newGameHitpoints: { type: Number },
-			newGameEnemiesDelay: { type: Number }
+			state: { type: Object }
 		};
 	}
 
@@ -148,24 +133,6 @@ class App extends LitElement {
 				text-align: center;
 				flex: 1;
 			}
-			.menu {
-				display: flex;
-				flex-wrap: wrap;
-				padding-top: 1rem;
-				justify-content: flex-end;
-				align-items: center;
-				font-size: 1.2rem;
-			}
-			input[type='text'] {
-				width: 25px;
-				font-size: 1.2rem;
-				background: transparent;
-				border: none;
-				text-align: center;
-			}
-			.menu > * {
-				margin-right: 5px;
-			}
 		`;
 	}
 
@@ -182,131 +149,77 @@ class App extends LitElement {
 					${this.state.boardWidth}x${this.state.boardHeight}
 				</h1>
 				<div class="content">
-					<div class="status">
-						<div class="status-item">
-							⏳ ${this.state.roundsToSurvive - this.state.round}
-						</div>
-						<div class="status-item">
-							${entities.BOMB.repeat(
-								this.state.bombs - bombCount
-							)}
-						</div>
-					</div>
-					<ul
-						style="grid-template-columns: ${'1fr '.repeat(
-							this.state.boardWidth
-						)}"
-					>
-						${this.state.board.map((cell, index) => {
-							return html`
-								<li>
-									<button
-										?disabled=${cell.occupant !==
-											entities.EMPTY ||
-											bombCount === this.state.bombs ||
-											this.state.gameState ===
-												gamestates.LOST}
-										@click=${e => {
-											this.onFieldClicked(index);
-										}}
-									>
-										${cell.occupant}
-									</button>
-									<small>${cell.timer}</small>
-								</li>
-							`;
-						})}
-					</ul>
-					<div class="status">
-						<div class="status-item">
-							${'🏠️'.repeat(this.state.lives)}
-						</div>
-					</div>
-					${this.state.gameState === gamestates.LOST
+					${this.state.gameState !== gamestates.LOST
 						? html`
-								Game Over
+								<div class="status">
+									<div class="status-item">
+										⏳
+										${this.state.roundsToSurvive -
+											this.state.round}
+									</div>
+									<div class="status-item">
+										${entities.BOMB.repeat(
+											this.state.bombs - bombCount
+										)}
+									</div>
+								</div>
+								<ul
+									style=${`grid-template-columns: ${'1fr '.repeat(
+										this.state.boardWidth
+									)}`}
+								>
+									${this.state.board.map((cell, index) => {
+										return html`
+											<li>
+												<button
+													?disabled=${cell.occupant !==
+														entities.EMPTY ||
+														bombCount ===
+															this.state.bombs ||
+														this.state.gameState ===
+															gamestates.LOST}
+													@click=${e => {
+														this.onFieldClicked(
+															index
+														);
+													}}
+												>
+													${cell.occupant}
+												</button>
+												<small>${cell.timer}</small>
+											</li>
+										`;
+									})}
+								</ul>
+								<div class="status">
+									<div class="status-item">
+										${'🏠️'.repeat(this.state.lives)}
+									</div>
+								</div>
+								${this.state.gameState === gamestates.LOST
+									? html`
+											Game Over
+									  `
+									: html`
+											<button
+												class="fat-button"
+												@click=${() => {
+													this.onAdvanceRound({
+														type: actions.WAIT
+													});
+												}}
+											>
+												Next Round
+											</button>
+									  `}
 						  `
 						: html`
-								<button
-									class="fat-button"
-									@click=${() => {
-										this.onAdvanceRound({
-											type: actions.WAIT
-										});
+								<gridrounds-menu
+									@new-game=${e => {
+										this.onAdvanceRound(e.detail);
 									}}
-								>
-									Next Round
-								</button>
+								></gridrounds-menu>
 						  `}
-					<div class="menu">
-						<span>
-							↔️
-						</span>
-						<input
-							type="text"
-							@change=${e =>
-								(this.newGameBoardWidth = e.target.value)}
-							value=${this.newGameBoardWidth}
-						/>
-						<span>
-							↕️
-						</span>
-						<input
-							type="text"
-							value=${this.newGameBoardHeight}
-							@change=${e =>
-								(this.newGameBoardHeight = e.target.value)}
-						/>
-						<span>
-							💣
-						</span>
-						<input
-							type="text"
-							value=${this.newGameBombs}
-							@change=${e => (this.newGameBombs = e.target.value)}
-						/>
-						<span>
-							🏠
-						</span>
-						<input
-							type="text"
-							value=${this.newGameHitpoints}
-							@change=${e =>
-								(this.newGameHitpoints = e.target.value)}
-						/>
-						<span>
-							👾
-						</span>
-						<input
-							type="text"
-							value=${this.newGameEnemiesDelay}
-							@change=${e =>
-								(this.newGameEnemiesDelay = e.target.value)}
-						/>
-						<button
-							@click=${() => {
-								this.onAdvanceRound({
-									type: actions.NEW_GAME,
-									boardWidth: parseInt(
-										this.newGameBoardWidth,
-										10
-									),
-									boardHeight: parseInt(
-										this.newGameBoardHeight,
-										10
-									),
-									lives: parseInt(this.newGameHitpoints, 10),
-									bombs: parseInt(this.newGameBombs, 10),
-									enemiesDelay: parseInt(
-										this.newGameEnemiesDelay,
-										10
-									)
-								});
-							}}
-						>
-							New
-						</button>
-					</div>
 				</div>
 			</main>
 		`;
