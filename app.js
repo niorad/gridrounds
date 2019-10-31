@@ -2,6 +2,7 @@ import { LitElement, html, css } from './vendor/LitElement.js';
 import { getFreshState, advanceRound } from './components/state.js';
 import entities from './components/entities.js';
 import actions from './components/actions.js';
+import gamestates from './components/gamestates.js';
 
 class App extends LitElement {
 	constructor() {
@@ -11,7 +12,7 @@ class App extends LitElement {
 		this.newGameBoardHeight = 5;
 		this.newGameBombs = 3;
 		this.newGameHitpoints = 3;
-		this.newGameEnemiesDelay = 0;
+		this.newGameEnemiesDelay = 1;
 	}
 
 	static get properties() {
@@ -174,7 +175,9 @@ class App extends LitElement {
 							⏳ ${this.state.roundsToSurvive - this.state.round}
 						</div>
 						<div class="status-item">
-							${entities.BOMB.repeat(3 - bombCount)}
+							${entities.BOMB.repeat(
+								this.state.bombs - bombCount
+							)}
 						</div>
 					</div>
 					<ul
@@ -187,7 +190,10 @@ class App extends LitElement {
 								<li>
 									<button
 										?disabled=${cell.occupant !==
-											entities.EMPTY || bombCount === 3}
+											entities.EMPTY ||
+											bombCount === this.state.bombs ||
+											this.state.gameState ===
+												gamestates.LOST}
 										@click=${e => {
 											this.onFieldClicked(index);
 										}}
@@ -204,17 +210,25 @@ class App extends LitElement {
 							${'🏠️'.repeat(this.state.lives)}
 						</div>
 					</div>
-					<button
-						class="fat-button"
-						@click=${() => {
-							this.onAdvanceRound({ type: actions.WAIT });
-						}}
-					>
-						Next Round
-					</button>
+					${this.state.gameState === gamestates.LOST
+						? html`
+								Game Over
+						  `
+						: html`
+								<button
+									class="fat-button"
+									@click=${() => {
+										this.onAdvanceRound({
+											type: actions.WAIT
+										});
+									}}
+								>
+									Next Round
+								</button>
+						  `}
 					<div class="menu">
 						<span>
-							W
+							↔️
 						</span>
 						<input
 							type="number"
@@ -223,7 +237,7 @@ class App extends LitElement {
 							value=${this.newGameBoardWidth}
 						/>
 						<span>
-							H
+							↕️
 						</span>
 						<input
 							type="number"
@@ -232,7 +246,7 @@ class App extends LitElement {
 								(this.newGameBoardHeight = e.target.value)}
 						/>
 						<span>
-							B
+							💣
 						</span>
 						<input
 							type="number"
@@ -240,13 +254,22 @@ class App extends LitElement {
 							@change=${e => (this.newGameBombs = e.target.value)}
 						/>
 						<span>
-							HP
+							🏠
 						</span>
 						<input
 							type="number"
 							value=${this.newGameHitpoints}
 							@change=${e =>
 								(this.newGameHitpoints = e.target.value)}
+						/>
+						<span>
+							👾
+						</span>
+						<input
+							type="number"
+							value=${this.newGameEnemiesDelay}
+							@change=${e =>
+								(this.newGameEnemiesDelay = e.target.value)}
 						/>
 						<button
 							@click=${() => {
@@ -258,6 +281,12 @@ class App extends LitElement {
 									),
 									boardHeight: parseInt(
 										this.newGameBoardHeight,
+										10
+									),
+									lives: parseInt(this.newGameHitpoints, 10),
+									bombs: parseInt(this.newGameBombs, 10),
+									enemiesDelay: parseInt(
+										this.newGameEnemiesDelay,
 										10
 									)
 								});

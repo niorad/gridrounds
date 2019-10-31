@@ -16,7 +16,13 @@ export const advanceRound = (state, action) => {
 	} else if (action.type === actions.DROP_ITEM) {
 		return addBomb(state, action.position);
 	} else if (action.type === actions.NEW_GAME) {
-		return getFreshState(action.boardWidth, action.boardHeight);
+		return getFreshState(
+			action.boardWidth,
+			action.boardHeight,
+			action.bombs,
+			action.lives,
+			action.enemiesDelay
+		);
 	}
 	return state;
 };
@@ -39,11 +45,11 @@ function moveEnemies(state) {
 
 function addEnemies(state) {
 	const s = { ...state };
-	// if (s.round % 2 === 1) {
-	s.board[Math.floor(Math.random() * s.boardWidth)] = {
-		occupant: entities.ENEMY
-	};
-	// }
+	if (s.round % state.enemiesDelay === 0) {
+		s.board[Math.floor(Math.random() * s.boardWidth)] = {
+			occupant: entities.ENEMY
+		};
+	}
 	return s;
 }
 
@@ -53,8 +59,7 @@ function addBomb(state, cell) {
 	const bombCount = s.board.filter(val => val.occupant === entities.BOMB)
 		.length;
 
-	if (bombCount >= 3) {
-		alert('No more than 3 Bombs');
+	if (bombCount >= state.bombs) {
 		return s;
 	}
 
@@ -77,8 +82,7 @@ function tickBombs(state) {
 function checkIfLost(state) {
 	const s = { ...state };
 	if (s.lives <= 0) {
-		alert('G A M E   O V E R');
-		return getFreshState();
+		s.gameState = gameStates.LOST;
 	}
 	return s;
 }
@@ -147,10 +151,18 @@ function addRound(state) {
 	return s;
 }
 
-export const getFreshState = (boardWidth = 5, boardHeight = 5) => {
+export const getFreshState = (
+	boardWidth = 5,
+	boardHeight = 5,
+	bombs = 3,
+	lives = 3,
+	enemiesDelay = 1
+) => {
 	return {
 		round: 0,
-		lives: 3,
+		lives,
+		bombs,
+		enemiesDelay,
 		roundsToSurvive: 30,
 		gameState: gameStates.PRISTINE,
 		boardWidth,
