@@ -7,12 +7,18 @@ import gamestates from './components/gamestates.js';
 class App extends LitElement {
 	constructor() {
 		super();
-		this.state = getFreshState();
 		this.newGameBoardWidth = 5;
 		this.newGameBoardHeight = 5;
 		this.newGameBombs = 3;
 		this.newGameHitpoints = 3;
 		this.newGameEnemiesDelay = 1;
+		this.state = getFreshState(
+			this.newGameBoardWidth,
+			this.newGameBoardHeight,
+			this.newGameBombs,
+			this.newGameHitpoints,
+			this.newGameEnemiesDelay
+		);
 	}
 
 	static get properties() {
@@ -147,9 +153,11 @@ class App extends LitElement {
 				padding-top: 1rem;
 				justify-content: flex-start;
 				align-items: center;
+				font-size: 1.2rem;
 			}
 			input[type='number'] {
 				width: 25px;
+				font-size: 1rem;
 			}
 			.menu > * {
 				margin-right: 5px;
