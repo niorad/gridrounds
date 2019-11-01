@@ -33,10 +33,15 @@ class Menu extends LitElement {
 			}
 			input[type='number'] {
 				font-size: 1.2rem;
-				flex: 1;
 			}
 			.menu > * {
 				display: flex;
+				align-items: center;
+				margin-bottom: 0.5rem;
+			}
+			.menu span,
+			.menu input {
+				flex: 0 1 50%;
 			}
 			button {
 				font-family: 'Microsoft Sans Serif', sans-serif;
@@ -48,6 +53,7 @@ class Menu extends LitElement {
 				border-color: #ffffff #808080 #808080 #ffffff;
 				cursor: url(win95mouse.png), auto;
 				width: 100%;
+				margin-top: 1rem;
 			}
 		`;
 	}
@@ -57,7 +63,7 @@ class Menu extends LitElement {
 			<div class="menu">
 				<div>
 					<span>
-						↔️
+						Board Width
 					</span>
 					<input
 						type="number"
@@ -68,7 +74,7 @@ class Menu extends LitElement {
 				</div>
 				<div>
 					<span>
-						↕️
+						Board Height
 					</span>
 					<input
 						type="number"
@@ -79,7 +85,7 @@ class Menu extends LitElement {
 				</div>
 				<div>
 					<span>
-						💣
+						Bombs
 					</span>
 					<input
 						type="number"
@@ -89,7 +95,7 @@ class Menu extends LitElement {
 				</div>
 				<div>
 					<span>
-						⏱
+						Bombs Time
 					</span>
 					<input
 						type="number"
@@ -99,7 +105,7 @@ class Menu extends LitElement {
 				</div>
 				<div>
 					<span>
-						🏠
+						Hitpoints
 					</span>
 					<input
 						type="number"
@@ -109,7 +115,7 @@ class Menu extends LitElement {
 				</div>
 				<div>
 					<span>
-						👾
+						Enemy Freq
 					</span>
 					<input
 						type="number"

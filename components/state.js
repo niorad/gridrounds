@@ -15,6 +15,8 @@ export const advanceRound = (state, action) => {
 		);
 	} else if (action.type === actions.DROP_ITEM) {
 		return addBomb(state, action.position);
+	} else if (action.type === actions.END_GAME) {
+		return endGame(state);
 	} else if (action.type === actions.NEW_GAME) {
 		return getFreshState(
 			action.boardWidth,
@@ -85,6 +87,12 @@ function checkIfLost(state) {
 	if (s.lives <= 0) {
 		s.gameState = gameStates.LOST;
 	}
+	return s;
+}
+
+function endGame(state) {
+	const s = { ...state };
+	s.gameState = gameStates.LOST;
 	return s;
 }
 

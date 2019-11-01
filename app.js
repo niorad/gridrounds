@@ -68,7 +68,20 @@ class App extends LitElement {
 				margin: 0 2px 0 0;
 				background-image: linear-gradient(to right, #102b73, #a5cbf7);
 				padding: 5px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
 			}
+
+			h1 button {
+				margin: 0;
+				width: 20px;
+				height: 20px;
+				padding: 0;
+				line-height: 20px;
+				text-align: center;
+			}
+
 			.content {
 				padding: 1rem;
 			}
@@ -145,8 +158,17 @@ class App extends LitElement {
 		return html`
 			<main>
 				<h1>
-					gridrounds.exe —
-					${this.state.boardWidth}x${this.state.boardHeight}
+					<span>
+						gridrounds.exe —
+						${this.state.boardWidth}&times;${this.state.boardHeight}
+					</span>
+					<button
+						@click=${() => {
+							this.onAdvanceRound({ type: actions.END_GAME });
+						}}
+					>
+						✖️
+					</button>
 				</h1>
 				<div class="content">
 					${this.state.gameState !== gamestates.LOST
