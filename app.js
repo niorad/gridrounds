@@ -71,6 +71,7 @@ class App extends LitElement {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
+				height: 20px;
 			}
 
 			h1 button {
@@ -157,22 +158,25 @@ class App extends LitElement {
 
 		return html`
 			<main>
-				<h1>
-					<span>
-						gridrounds.exe —
-						${this.state.boardWidth}&times;${this.state.boardHeight}
-					</span>
-					<button
-						@click=${() => {
-							this.onAdvanceRound({ type: actions.END_GAME });
-						}}
-					>
-						✖️
-					</button>
-				</h1>
-				<div class="content">
-					${this.state.gameState !== gamestates.LOST
-						? html`
+				${this.state.gameState !== gamestates.LOST
+					? html`
+							<h1>
+								<span>
+									gridrounds.exe —
+									${this.state.boardWidth}&times;${this.state
+										.boardHeight}
+								</span>
+								<button
+									@click=${() => {
+										this.onAdvanceRound({
+											type: actions.END_GAME
+										});
+									}}
+								>
+									✖️
+								</button>
+							</h1>
+							<div class="content">
 								<div class="status">
 									<div class="status-item">
 										⏳
@@ -234,15 +238,22 @@ class App extends LitElement {
 												Next Round
 											</button>
 									  `}
-						  `
-						: html`
+							</div>
+					  `
+					: html`
+							<h1>
+								<span>
+									gridrounds.exe — New Game
+								</span>
+							</h1>
+							<div class="content">
 								<gridrounds-menu
 									@new-game=${e => {
 										this.onAdvanceRound(e.detail);
 									}}
 								></gridrounds-menu>
-						  `}
-				</div>
+							</div>
+					  `}
 			</main>
 		`;
 	}
