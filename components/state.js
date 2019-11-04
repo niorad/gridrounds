@@ -98,17 +98,79 @@ function endGame(state) {
 
 function explodeBombs(state) {
 	const s = { ...state };
+
 	for (let i = 0; i < s.board.length; i++) {
 		if (s.board[i].occupant === entities.BOMB && s.board[i].timer <= 0) {
 			s.board[i] = { occupant: entities.EXPLOSION };
-			// has tile to the right
-			if ((i + 1) % s.boardWidth !== 0) {
-				if (s.board[i + 1].occupant !== entities.BOMB) {
-					s.board[i + 1] = { occupant: entities.EXPLOSION };
+
+			const t = i - s.boardWidth;
+			const tr = i - s.boardWidth + 1;
+			const r = i + 1;
+			const br = i + s.boardWidth + 1;
+			const b = i + s.boardWidth;
+			const bl = i + s.boardWidth - 1;
+			const l = i - 1;
+			const tl = i - s.boardWidth - 1;
+
+			// has tile to the top
+			if (t >= 0) {
+				if (s.board[t].occupant !== entities.BOMB) {
+					s.board[t] = {
+						occupant: entities.EXPLOSION
+					};
 				} else {
-					s.board[i + 1].timer = -1;
+					s.board[t].timer = -1;
 				}
 			}
+
+			// has tile to the top-right
+			// if (
+			// 	i - s.boardWidth + 1 >= 0 &&
+			// 	(i + 1) % (i - s.boardWidth + 1) !== 0
+			// ) {
+			// 	if (s.board[i - s.boardWidth + 1].occupant === entities.BOMB) {
+			// 		s.board[i - s.boardWidth + 1].timer = -1;
+			// 	}
+			// }
+
+			// has tile to the right
+			if (r % s.boardWidth !== 0) {
+				if (s.board[r].occupant !== entities.BOMB) {
+					s.board[r] = { occupant: entities.EXPLOSION };
+				} else {
+					s.board[r].timer = -1;
+				}
+			}
+
+			// has tile to the bottom-right
+			// if (i + s.boardWidth + 1 <= s.board.length - 1) {
+			// 	if (s.board[i + s.boardWidth].occupant === entities.BOMB) {
+			// 		s.board[i + s.boardWidth].timer = -1;
+			// 	}
+			// }
+
+			// has tile to the bottom
+			if (b <= s.board.length - 1) {
+				if (s.board[b].occupant !== entities.BOMB) {
+					s.board[b] = {
+						occupant: entities.EXPLOSION
+					};
+				} else {
+					s.board[b].timer = -1;
+				}
+			}
+
+			// has tile to the bottom-left
+			// if (i + s.boardWidth <= s.board.length - 1) {
+			// 	if (s.board[i + s.boardWidth].occupant !== entities.BOMB) {
+			// 		s.board[i + s.boardWidth] = {
+			// 			occupant: entities.EXPLOSION
+			// 		};
+			// 	} else {
+			// 		s.board[i + s.boardWidth].timer = -1;
+			// 	}
+			// }
+
 			// has tile to the left
 			if ((i - 1) % s.boardWidth !== s.boardWidth - 1) {
 				if (s.board[i - 1].occupant !== entities.BOMB) {
@@ -117,26 +179,15 @@ function explodeBombs(state) {
 					s.board[i - 1].timer = -1;
 				}
 			}
-			// has tile to the top
-			if (i - s.boardWidth >= 0) {
-				if (s.board[i - s.boardWidth].occupant !== entities.BOMB) {
-					s.board[i - s.boardWidth] = {
-						occupant: entities.EXPLOSION
-					};
-				} else {
-					s.board[i - s.boardWidth].timer = -1;
-				}
-			}
-			// has tile to the bottom
-			if (i + s.boardWidth <= s.board.length - 1) {
-				if (s.board[i + s.boardWidth].occupant !== entities.BOMB) {
-					s.board[i + s.boardWidth] = {
-						occupant: entities.EXPLOSION
-					};
-				} else {
-					s.board[i + s.boardWidth].timer = -1;
-				}
-			}
+
+			// has tile to the top-left
+			// if ((i - 1) % s.boardWidth !== s.boardWidth - 1) {
+			// 	if (s.board[i - 1].occupant !== entities.BOMB) {
+			// 		s.board[i - 1] = { occupant: entities.EXPLOSION };
+			// 	} else {
+			// 		s.board[i - 1].timer = -1;
+			// 	}
+			// }
 			// if bomb found, start from beginning to explode all bombs
 			i = 0;
 		}

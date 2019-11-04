@@ -1,5 +1,5 @@
 import { LitElement, html, css } from '../vendor/LitElement.js';
-import actions from '/components/actions.js';
+import actions from '../components/actions.js';
 
 class Menu extends LitElement {
 	constructor() {
