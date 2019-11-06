@@ -19,19 +19,23 @@ class App extends LitElement {
 
 	onAdvanceRound(action) {
 		this.state = advanceRound(this.state, action);
-		if (
-			this.state.board.filter(i => i.occupant === entities.EXPLOSION).length > 0 &&
-			action.type !== actions.DROP_ITEM
-		) {
+
+		if (this.state.events.indexOf(actions.EXPLOSION) >= 0) {
 			const explosion = new Audio('./explosion.wav');
 			explosion.play();
-		} else if (action.type === actions.DROP_ITEM) {
+		}
+		if (this.state.events.indexOf(actions.DROP_ITEM) >= 0) {
 			const fuse = new Audio('./fuse.wav');
 			fuse.play();
-		} else {
-			const blip = new Audio('./blip.wav');
-			blip.play();
 		}
+
+		if (this.state.events.indexOf(actions.LOST_HP) >= 0) {
+			const hit = new Audio('./hit.wav');
+			hit.play();
+		}
+
+		const blip = new Audio('./blip.wav');
+		blip.play();
 	}
 
 	onFieldClicked(position) {
@@ -46,13 +50,10 @@ class App extends LitElement {
 		return css`
 			@keyframes explode {
 				0% {
-					transform: scale(0.9);
-				}
-				50% {
-					transform: scale(1.2);
+					transform: scale(0.2);
 				}
 				100% {
-					transform: scale(0.9);
+					transform: scale(1.2);
 				}
 			}
 			@keyframes moveDown {
@@ -133,9 +134,9 @@ class App extends LitElement {
 			li button .explosion {
 				animation-name: explode;
 				animation-duration: 0.5s;
-				animation-fill-mode: both;
+				/* animation-fill-mode: both; */
 				animation-iteration-count: infinite;
-				animation-timing-function: ease-in-out;
+				animation-timing-function: ease-out;
 			}
 			li button .enemy {
 				animation-name: moveDown;
@@ -180,7 +181,7 @@ class App extends LitElement {
 					? html`
 							<h1>
 								<span>
-									Gridrounds — ${this.state.boardWidth}&times;${this.state.boardHeight}
+									Gridrounds
 								</span>
 								<button
 									@click=${() => {

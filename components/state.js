@@ -4,11 +4,13 @@ import gameStates from './gamestates.js';
 
 export const advanceRound = (state, action) => {
 	if (action.type === actions.WAIT) {
-		return checkIfLost(addEnemies(addRound(explodeBombs(tickBombs(moveEnemies(cleanUpExplosions({ ...state })))))));
+		return checkIfLost(
+			addEnemies(addRound(explodeBombs(tickBombs(moveEnemies(cleanUpExplosions(clearEvents({ ...state })))))))
+		);
 	} else if (action.type === actions.DROP_ITEM) {
-		return addBomb(state, action.position);
+		return addBomb(clearEvents(state), action.position);
 	} else if (action.type === actions.END_GAME) {
-		return endGame(state);
+		return endGame(clearEvents(state));
 	} else if (action.type === actions.NEW_GAME) {
 		return getFreshState(
 			action.boardWidth,
@@ -22,6 +24,12 @@ export const advanceRound = (state, action) => {
 	return state;
 };
 
+function clearEvents(state) {
+	const s = { ...state };
+	s.events = [];
+	return s;
+}
+
 function moveEnemies(state) {
 	const s = { ...state };
 	for (let i = s.board.length - 1; i >= 0; i--) {
@@ -32,6 +40,7 @@ function moveEnemies(state) {
 			} else {
 				console.log('ENEMY HIT HOMEBASE');
 				s.lives--;
+				s.events = [...s.events, actions.LOST_HP];
 			}
 		}
 	}
@@ -59,6 +68,7 @@ function addBomb(state, cell) {
 
 	if (s.board[cell].occupant === entities.EMPTY) {
 		s.board[cell] = { occupant: entities.BOMB, timer: s.bombTimer };
+		s.events = [...s.events, actions.DROP_ITEM];
 	}
 	return s;
 }
@@ -93,6 +103,7 @@ function explodeBombs(state) {
 	for (let i = 0; i < s.board.length; i++) {
 		if (s.board[i].occupant === entities.BOMB && s.board[i].timer <= 0) {
 			s.board[i] = { occupant: entities.EXPLOSION };
+			s.events = [...s.events, actions.EXPLOSION];
 
 			const t = i - s.boardWidth;
 			const tr = i - s.boardWidth + 1;
@@ -211,6 +222,7 @@ export const getFreshState = (
 	gameState: gameStates.PRISTINE,
 	boardWidth,
 	boardHeight,
+	events: [],
 	board: Array(boardWidth * boardHeight).fill({
 		occupant: entities.EMPTY
 	})
