@@ -37,23 +37,22 @@ class Menu extends LitElement {
 			.menu > * {
 				display: flex;
 				align-items: center;
-				margin-bottom: 0.5rem;
 			}
 			.menu span,
 			.menu input {
 				flex: 0 1 50%;
 			}
 			button {
-				font-family: 'Microsoft Sans Serif', sans-serif;
 				font-size: 13px;
-				outline: 1px solid #000000;
-				background: rgb(214, 211, 206);
-				border-width: 1px;
-				border-style: solid;
-				border-color: #ffffff #808080 #808080 #ffffff;
-				cursor: url(win95mouse.png), auto;
+				background: #2c3e50;
+				border: none;
+				text-transform: uppercase;
+				font-weight: bold;
+				color: white;
 				width: 100%;
 				margin-top: 1rem;
+				padding: 10px;
+				cursor: pointer;
 			}
 		`;
 	}

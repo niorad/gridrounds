@@ -37,50 +37,20 @@ class App extends LitElement {
 	static get styles() {
 		return css`
 			main {
-				background: rgb(214, 211, 206);
 				max-width: 400px;
 				margin: auto;
 				margin-top: 2rem;
-				padding: 2px;
-				border-bottom-style: solid;
-				border-bottom-width: 2px;
-				border-image-outset: 0px;
-				border-image-repeat: stretch;
-				border-image-slice: 100%;
-				border-image-source: none;
-				border-image-width: 1;
-				border-left-color: rgb(255, 255, 255);
-				border-left-style: solid;
-				border-left-width: 2px;
-				border-right-color: rgb(5, 6, 8);
-				border-right-style: solid;
-				border-right-width: 2px;
-				border-top-color: rgb(255, 255, 255);
-				border-top-style: solid;
-				border-top-width: 2px;
-				box-shadow: rgb(223, 224, 227) 1px 1px 0px 1px inset,
-					rgb(136, 140, 143) -1px -1px 0px 1px inset;
+				padding: 10px;
 			}
 			h1 {
-				color: white;
 				font-size: 13px;
-				font-weight: bold;
+				font-weight: normal;
 				margin: 0 2px 0 0;
-				background-image: linear-gradient(to right, #102b73, #a5cbf7);
 				padding: 5px;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				height: 20px;
-			}
-
-			h1 button {
-				margin: 0;
-				width: 20px;
-				height: 20px;
-				padding: 0;
-				line-height: 20px;
-				text-align: center;
+				text-transform: uppercase;
 			}
 
 			.content {
@@ -97,7 +67,6 @@ class App extends LitElement {
 			li {
 				text-align: center;
 				position: relative;
-				border: 1px solid rgba(0, 0, 0, 0.2);
 			}
 			li small {
 				font-size: 12px;
@@ -105,37 +74,52 @@ class App extends LitElement {
 				right: 5px;
 				bottom: 3px;
 			}
+			li .square {
+				width: 100%;
+				padding-top: 100%;
+				position: relative;
+			}
 			li button {
 				font-size: 2.4rem;
 				margin: 0;
 				width: 100%;
 				max-width: 100%;
 				padding: 0;
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				outline: 1px dashed #d35400;
+				outline-offset: -3px;
 			}
+			li button:not([disabled]):hover {
+				cursor: pointer;
+				outline: 2px dashed #d35400;
+			}
+
 			li button[disabled] {
 				color: black;
-				outline: none;
-				border-color: transparent;
+				outline: transparent;
+			}
+			li button .explosion {
+				animation-name: explode;
+				animation-duration: 2s;
+				animation-fill-mode: both;
 			}
 			button {
-				font-family: 'Microsoft Sans Serif', sans-serif;
 				font-size: 13px;
-				outline: 1px solid #000000;
-				background: rgb(214, 211, 206);
-				border-width: 1px;
-				border-style: solid;
-				border-color: #ffffff #808080 #808080 #ffffff;
-				cursor: url(win95mouse.png), auto;
+				background: #2c3e50;
+				border: none;
+				text-transform: uppercase;
+				font-weight: bold;
+				color: white;
 			}
 			.fat-button {
 				width: 100%;
 				margin-top: 1rem;
 				padding: 10px;
-			}
-			hr {
-				border-top-color: #808080;
-				border-bottom-color: #ffffff;
-				margin-bottom: 1rem;
+				cursor: pointer;
 			}
 			.status {
 				display: flex;
@@ -146,6 +130,14 @@ class App extends LitElement {
 			.status-item {
 				text-align: center;
 				flex: 1;
+			}
+			@keyframes explode {
+				from {
+					transform: scale(0.5);
+				}
+				to {
+					transform: scale(1.5);
+				}
 			}
 		`;
 	}
@@ -162,7 +154,7 @@ class App extends LitElement {
 					? html`
 							<h1>
 								<span>
-									gridrounds.exe —
+									Gridrounds —
 									${this.state.boardWidth}&times;${this.state
 										.boardHeight}
 								</span>
@@ -173,7 +165,7 @@ class App extends LitElement {
 										});
 									}}
 								>
-									✖️
+									New Game
 								</button>
 							</h1>
 							<div class="content">
@@ -197,29 +189,39 @@ class App extends LitElement {
 									${this.state.board.map((cell, index) => {
 										return html`
 											<li>
-												<button
-													?disabled=${cell.occupant !==
-														entities.EMPTY ||
-														bombCount ===
-															this.state.bombs ||
-														this.state.gameState ===
-															gamestates.LOST}
-													@click=${e => {
-														this.onFieldClicked(
-															index
-														);
-													}}
-												>
-													${cell.occupant}
-												</button>
-												<small>${cell.timer}</small>
+												<div class="square">
+													<button
+														?disabled=${cell.occupant !==
+															entities.EMPTY ||
+															bombCount ===
+																this.state
+																	.bombs ||
+															this.state
+																.gameState ===
+																gamestates.LOST}
+														@click=${e => {
+															this.onFieldClicked(
+																index
+															);
+														}}
+													>
+														<span
+															class=${cell.occupant ===
+															entities.EXPLOSION
+																? 'explosion'
+																: ''}
+															>${cell.occupant}</span
+														>
+													</button>
+													<small>${cell.timer}</small>
+												</div>
 											</li>
 										`;
 									})}
 								</ul>
 								<div class="status">
 									<div class="status-item">
-										${'🏠️'.repeat(this.state.lives)}
+										${'❤️️'.repeat(this.state.lives)}
 									</div>
 								</div>
 								${this.state.gameState === gamestates.LOST

@@ -124,14 +124,11 @@ function explodeBombs(state) {
 			}
 
 			// has tile to the top-right
-			// if (
-			// 	i - s.boardWidth + 1 >= 0 &&
-			// 	(i + 1) % (i - s.boardWidth + 1) !== 0
-			// ) {
-			// 	if (s.board[i - s.boardWidth + 1].occupant === entities.BOMB) {
-			// 		s.board[i - s.boardWidth + 1].timer = -1;
-			// 	}
-			// }
+			if (tr >= 0 && tr % s.boardWidth !== 0) {
+				if (s.board[tr].occupant === entities.BOMB) {
+					s.board[tr].timer = -1;
+				}
+			}
 
 			// has tile to the right
 			if (r % s.boardWidth !== 0) {
@@ -143,14 +140,14 @@ function explodeBombs(state) {
 			}
 
 			// has tile to the bottom-right
-			// if (i + s.boardWidth + 1 <= s.board.length - 1) {
-			// 	if (s.board[i + s.boardWidth].occupant === entities.BOMB) {
-			// 		s.board[i + s.boardWidth].timer = -1;
-			// 	}
-			// }
+			if (br < s.board.length && br % s.boardWidth !== 0) {
+				if (s.board[br].occupant === entities.BOMB) {
+					s.board[br].timer = -1;
+				}
+			}
 
 			// has tile to the bottom
-			if (b <= s.board.length - 1) {
+			if (b < s.board.length) {
 				if (s.board[b].occupant !== entities.BOMB) {
 					s.board[b] = {
 						occupant: entities.EXPLOSION
@@ -161,15 +158,11 @@ function explodeBombs(state) {
 			}
 
 			// has tile to the bottom-left
-			// if (i + s.boardWidth <= s.board.length - 1) {
-			// 	if (s.board[i + s.boardWidth].occupant !== entities.BOMB) {
-			// 		s.board[i + s.boardWidth] = {
-			// 			occupant: entities.EXPLOSION
-			// 		};
-			// 	} else {
-			// 		s.board[i + s.boardWidth].timer = -1;
-			// 	}
-			// }
+			if (bl < s.board.length && bl % s.boardWidth !== s.boardWidth - 1) {
+				if (s.board[bl].occupant === entities.BOMB) {
+					s.board[bl].timer = -1;
+				}
+			}
 
 			// has tile to the left
 			if ((i - 1) % s.boardWidth !== s.boardWidth - 1) {
@@ -181,13 +174,12 @@ function explodeBombs(state) {
 			}
 
 			// has tile to the top-left
-			// if ((i - 1) % s.boardWidth !== s.boardWidth - 1) {
-			// 	if (s.board[i - 1].occupant !== entities.BOMB) {
-			// 		s.board[i - 1] = { occupant: entities.EXPLOSION };
-			// 	} else {
-			// 		s.board[i - 1].timer = -1;
-			// 	}
-			// }
+			if (tl >= 0 && tl % s.boardWidth !== s.boardWidth - 1) {
+				if (s.board[tl].occupant === entities.BOMB) {
+					s.board[tl].timer = -1;
+				}
+			}
+
 			// if bomb found, start from beginning to explode all bombs
 			i = 0;
 		}
