@@ -25,6 +25,9 @@ class App extends LitElement {
 		) {
 			const explosion = new Audio('./explosion.wav');
 			explosion.play();
+		} else if (action.type === actions.DROP_ITEM) {
+			const fuse = new Audio('./fuse.wav');
+			fuse.play();
 		} else {
 			const blip = new Audio('./blip.wav');
 			blip.play();
@@ -32,8 +35,6 @@ class App extends LitElement {
 	}
 
 	onFieldClicked(position) {
-		const fuse = new Audio('./fuse.wav');
-		fuse.play();
 		this.onAdvanceRound({
 			type: actions.DROP_ITEM,
 			entity: entities.BOMB,
@@ -43,6 +44,26 @@ class App extends LitElement {
 
 	static get styles() {
 		return css`
+			@keyframes explode {
+				0% {
+					transform: scale(0.9);
+				}
+				50% {
+					transform: scale(1.2);
+				}
+				100% {
+					transform: scale(0.9);
+				}
+			}
+			@keyframes moveDown {
+				0% {
+					transform: translateY(-20px);
+				}
+				100% {
+					transform: translateY(0);
+				}
+			}
+
 			main {
 				max-width: 400px;
 				margin: auto;
@@ -111,8 +132,16 @@ class App extends LitElement {
 			}
 			li button .explosion {
 				animation-name: explode;
-				animation-duration: 2s;
+				animation-duration: 0.5s;
 				animation-fill-mode: both;
+				animation-iteration-count: infinite;
+				animation-timing-function: ease-in-out;
+			}
+			li button .enemy {
+				animation-name: moveDown;
+				animation-duration: 0.2s;
+				animation-fill-mode: both;
+				animation-timing-function: ease-in-out;
 			}
 			button {
 				font-size: 13px;
@@ -137,14 +166,6 @@ class App extends LitElement {
 			.status-item {
 				text-align: center;
 				flex: 1;
-			}
-			@keyframes explode {
-				from {
-					transform: scale(0.5);
-				}
-				to {
-					transform: scale(1.5);
-				}
 			}
 		`;
 	}
@@ -197,12 +218,15 @@ class App extends LitElement {
 															hoverSound.play();
 														}}
 													>
-														<span
+														<div
 															class=${cell.occupant === entities.EXPLOSION
 																? 'explosion'
+																: cell.occupant === entities.ENEMY
+																? 'enemy'
 																: ''}
-															>${cell.occupant}</span
 														>
+															${cell.occupant}
+														</div>
 													</button>
 													<small>${cell.timer}</small>
 												</div>
