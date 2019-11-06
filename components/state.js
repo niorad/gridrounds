@@ -4,15 +4,7 @@ import gameStates from './gamestates.js';
 
 export const advanceRound = (state, action) => {
 	if (action.type === actions.WAIT) {
-		return checkIfLost(
-			addEnemies(
-				addRound(
-					explodeBombs(
-						tickBombs(moveEnemies(cleanUpExplosions({ ...state })))
-					)
-				)
-			)
-		);
+		return checkIfLost(addEnemies(addRound(explodeBombs(tickBombs(moveEnemies(cleanUpExplosions({ ...state })))))));
 	} else if (action.type === actions.DROP_ITEM) {
 		return addBomb(state, action.position);
 	} else if (action.type === actions.END_GAME) {
@@ -59,8 +51,7 @@ function addEnemies(state) {
 function addBomb(state, cell) {
 	const s = { ...state };
 
-	const bombCount = s.board.filter(val => val.occupant === entities.BOMB)
-		.length;
+	const bombCount = s.board.filter(val => val.occupant === entities.BOMB).length;
 
 	if (bombCount >= state.bombs) {
 		return s;

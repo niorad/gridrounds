@@ -19,14 +19,21 @@ class App extends LitElement {
 
 	onAdvanceRound(action) {
 		this.state = advanceRound(this.state, action);
-	}
-
-	onItemDrag(e) {
-		console.log('Draggin: ', e);
-		e.dataTransfer.setData('text/plain', entities.BOMB);
+		if (
+			this.state.board.filter(i => i.occupant === entities.EXPLOSION).length > 0 &&
+			action.type !== actions.DROP_ITEM
+		) {
+			const explosion = new Audio('./explosion.wav');
+			explosion.play();
+		} else {
+			const blip = new Audio('./blip.wav');
+			blip.play();
+		}
 	}
 
 	onFieldClicked(position) {
+		const fuse = new Audio('./fuse.wav');
+		fuse.play();
 		this.onAdvanceRound({
 			type: actions.DROP_ITEM,
 			entity: entities.BOMB,
@@ -144,9 +151,7 @@ class App extends LitElement {
 
 	render() {
 		console.log(this.state);
-		const bombCount = this.state.board.filter(
-			val => val.occupant === entities.BOMB
-		).length;
+		const bombCount = this.state.board.filter(val => val.occupant === entities.BOMB).length;
 
 		return html`
 			<main>
@@ -154,9 +159,7 @@ class App extends LitElement {
 					? html`
 							<h1>
 								<span>
-									Gridrounds —
-									${this.state.boardWidth}&times;${this.state
-										.boardHeight}
+									Gridrounds — ${this.state.boardWidth}&times;${this.state.boardHeight}
 								</span>
 								<button
 									@click=${() => {
@@ -171,43 +174,31 @@ class App extends LitElement {
 							<div class="content">
 								<div class="status">
 									<div class="status-item">
-										⏳
-										${this.state.roundsToSurvive -
-											this.state.round}
+										⏳ ${this.state.roundsToSurvive - this.state.round}
 									</div>
 									<div class="status-item">
-										${entities.BOMB.repeat(
-											this.state.bombs - bombCount
-										)}
+										${entities.BOMB.repeat(this.state.bombs - bombCount)}
 									</div>
 								</div>
-								<ul
-									style=${`grid-template-columns: ${'1fr '.repeat(
-										this.state.boardWidth
-									)}`}
-								>
+								<ul style=${`grid-template-columns: ${'1fr '.repeat(this.state.boardWidth)}`}>
 									${this.state.board.map((cell, index) => {
 										return html`
 											<li>
 												<div class="square">
 													<button
-														?disabled=${cell.occupant !==
-															entities.EMPTY ||
-															bombCount ===
-																this.state
-																	.bombs ||
-															this.state
-																.gameState ===
-																gamestates.LOST}
+														?disabled=${cell.occupant !== entities.EMPTY ||
+															bombCount === this.state.bombs ||
+															this.state.gameState === gamestates.LOST}
 														@click=${e => {
-															this.onFieldClicked(
-																index
-															);
+															this.onFieldClicked(index);
+														}}
+														@mouseenter=${() => {
+															const hoverSound = new Audio('./hover.wav');
+															hoverSound.play();
 														}}
 													>
 														<span
-															class=${cell.occupant ===
-															entities.EXPLOSION
+															class=${cell.occupant === entities.EXPLOSION
 																? 'explosion'
 																: ''}
 															>${cell.occupant}</span
@@ -245,7 +236,7 @@ class App extends LitElement {
 					: html`
 							<h1>
 								<span>
-									gridrounds.exe — New Game
+									Gridrounds — New Game
 								</span>
 							</h1>
 							<div class="content">

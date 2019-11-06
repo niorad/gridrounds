@@ -66,8 +66,7 @@ class Menu extends LitElement {
 					</span>
 					<input
 						type="number"
-						@change=${e =>
-							(this.newGameBoardWidth = e.target.value)}
+						@change=${e => (this.newGameBoardWidth = e.target.value)}
 						value=${this.newGameBoardWidth}
 					/>
 				</div>
@@ -78,8 +77,7 @@ class Menu extends LitElement {
 					<input
 						type="number"
 						value=${this.newGameBoardHeight}
-						@change=${e =>
-							(this.newGameBoardHeight = e.target.value)}
+						@change=${e => (this.newGameBoardHeight = e.target.value)}
 					/>
 				</div>
 				<div>
@@ -119,8 +117,7 @@ class Menu extends LitElement {
 					<input
 						type="number"
 						value=${this.newGameEnemiesDelay}
-						@change=${e =>
-							(this.newGameEnemiesDelay = e.target.value)}
+						@change=${e => (this.newGameEnemiesDelay = e.target.value)}
 					/>
 				</div>
 				<div>
@@ -129,24 +126,12 @@ class Menu extends LitElement {
 							const ev = new CustomEvent('new-game', {
 								detail: {
 									type: actions.NEW_GAME,
-									boardWidth: parseInt(
-										this.newGameBoardWidth,
-										10
-									),
-									boardHeight: parseInt(
-										this.newGameBoardHeight,
-										10
-									),
+									boardWidth: parseInt(this.newGameBoardWidth, 10),
+									boardHeight: parseInt(this.newGameBoardHeight, 10),
 									lives: parseInt(this.newGameHitpoints, 10),
 									bombs: parseInt(this.newGameBombs, 10),
-									bombTimer: parseInt(
-										this.newGameBombTimer,
-										10
-									),
-									enemiesDelay: parseInt(
-										this.newGameEnemiesDelay,
-										10
-									)
+									bombTimer: parseInt(this.newGameBombTimer, 10),
+									enemiesDelay: parseInt(this.newGameEnemiesDelay, 10)
 								}
 							});
 							this.dispatchEvent(ev);
