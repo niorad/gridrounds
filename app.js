@@ -9,11 +9,13 @@ class App extends LitElement {
 	constructor() {
 		super();
 		this.state = getFreshState();
+		this.chosenItem = entities.BOMB;
 	}
 
 	static get properties() {
 		return {
-			state: { type: Object }
+			state: { type: Object },
+			chosenItem: { type: String }
 		};
 	}
 
@@ -41,7 +43,7 @@ class App extends LitElement {
 	onFieldClicked(position) {
 		this.onAdvanceRound({
 			type: actions.DROP_ITEM,
-			entity: entities.BOMB,
+			entity: this.chosenItem,
 			position
 		});
 	}
@@ -168,12 +170,22 @@ class App extends LitElement {
 				text-align: center;
 				flex: 1;
 			}
+			.status-item button {
+				font-size: 1.6rem;
+				cursor: pointer;
+			}
+			.status-item button.active {
+				box-shadow: 0 0 10px white;
+			}
 		`;
 	}
 
 	render() {
 		console.log(this.state);
 		const bombCount = this.state.board.filter(val => val.occupant === entities.BOMB).length;
+		const trapCount = this.state.board.filter(val => val.occupant === entities.TRAP).length;
+		const chosenItemRemaining =
+			this.chosenItem === entities.BOMB ? this.state.bomb - bombCount : this.state.trap - trapCount;
 
 		return html`
 			<main>
@@ -198,9 +210,6 @@ class App extends LitElement {
 									<div class="status-item">
 										⏳ ${this.state.roundsToSurvive - this.state.round}
 									</div>
-									<div class="status-item">
-										${entities.BOMB.repeat(this.state.bombs - bombCount)}
-									</div>
 								</div>
 								<ul style=${`grid-template-columns: ${'1fr '.repeat(this.state.boardWidth)}`}>
 									${this.state.board.map((cell, index) => {
@@ -209,7 +218,7 @@ class App extends LitElement {
 												<div class="square">
 													<button
 														?disabled=${cell.occupant !== entities.EMPTY ||
-															bombCount === this.state.bombs ||
+															chosenItemRemaining === 0 ||
 															this.state.gameState === gamestates.LOST}
 														@click=${e => {
 															this.onFieldClicked(index);
@@ -236,6 +245,24 @@ class App extends LitElement {
 									})}
 								</ul>
 								<div class="status">
+									<div class="status-item">
+										<button
+											@click=${() => {
+												this.chosenItem = entities.BOMB;
+											}}
+											class=${this.chosenItem === entities.BOMB && 'active'}
+										>
+											${entities.BOMB} ${this.state.bomb - bombCount}
+										</button>
+										<button
+											@click=${() => {
+												this.chosenItem = entities.TRAP;
+											}}
+											class=${this.chosenItem === entities.TRAP && 'active'}
+										>
+											${entities.TRAP} ${this.state.trap - trapCount}
+										</button>
+									</div>
 									<div class="status-item">
 										${'❤️️'.repeat(this.state.lives)}
 									</div>

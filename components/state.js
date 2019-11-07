@@ -8,14 +8,14 @@ export const advanceRound = (state, action) => {
 			addEnemies(addRound(explodeBombs(tickBombs(moveEnemies(cleanUpExplosions(clearEvents({ ...state })))))))
 		);
 	} else if (action.type === actions.DROP_ITEM) {
-		return addBomb(clearEvents(state), action.position);
+		return addItem(clearEvents(state), action.entity, action.position);
 	} else if (action.type === actions.END_GAME) {
 		return endGame(clearEvents(state));
 	} else if (action.type === actions.NEW_GAME) {
 		return getFreshState(
 			action.boardWidth,
 			action.boardHeight,
-			action.bombs,
+			action.bomb,
 			action.bombTimer,
 			action.lives,
 			action.enemiesDelay
@@ -57,17 +57,26 @@ function addEnemies(state) {
 	return s;
 }
 
-function addBomb(state, cell) {
+function addItem(state, entity, cell) {
 	const s = { ...state };
 
 	const bombCount = s.board.filter(val => val.occupant === entities.BOMB).length;
+	const trapCount = s.board.filter(val => val.occupant === entities.TRAP).length;
 
-	if (bombCount >= state.bombs) {
+	if (entity === entities.BOMB && bombCount >= state.bomb) {
+		return s;
+	}
+	if (entity === entities.TRAP && trapCount >= state.traps) {
 		return s;
 	}
 
 	if (s.board[cell].occupant === entities.EMPTY) {
-		s.board[cell] = { occupant: entities.BOMB, timer: s.bombTimer };
+		s.board[cell] = { occupant: entity };
+
+		if (entity === entities.BOMB) {
+			s.board[cell].timer = s.bombTimer;
+		}
+
 		s.events = [...s.events, actions.DROP_ITEM];
 	}
 	return s;
@@ -208,14 +217,16 @@ function addRound(state) {
 export const getFreshState = (
 	boardWidth = 5,
 	boardHeight = 5,
-	bombs = 3,
+	bomb = 3,
 	bombTimer = 3,
+	trap = 3,
 	lives = 3,
 	enemiesDelay = 1
 ) => ({
 	round: 0,
 	lives,
-	bombs,
+	bomb,
+	trap,
 	enemiesDelay,
 	bombTimer,
 	roundsToSurvive: 30,
