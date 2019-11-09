@@ -5,7 +5,8 @@ class Menu extends LitElement {
 	constructor() {
 		super();
 		this.newGameBoardWidth = 5;
-		this.newGameBoardHeight = 5;
+		this.newGameBoardHeight = 6;
+		this.newGameTraps = 1;
 		this.newGameBombs = 3;
 		this.newGameBombTimer = 3;
 		this.newGameHitpoints = 3;
@@ -18,6 +19,7 @@ class Menu extends LitElement {
 			newGameBoardHeight: { type: Number },
 			newGameBombs: { type: Number },
 			newGameBombTimer: { type: Number },
+			newGameTraps: { type: Number },
 			newGameHitpoints: { type: Number },
 			newGameEnemiesDelay: { type: Number }
 		};
@@ -102,6 +104,16 @@ class Menu extends LitElement {
 				</div>
 				<div>
 					<span>
+						Traps
+					</span>
+					<input
+						type="number"
+						value=${this.newGameTraps}
+						@change=${e => (this.newGameTraps = e.target.value)}
+					/>
+				</div>
+				<div>
+					<span>
 						Hitpoints
 					</span>
 					<input
@@ -129,7 +141,8 @@ class Menu extends LitElement {
 									boardWidth: parseInt(this.newGameBoardWidth, 10),
 									boardHeight: parseInt(this.newGameBoardHeight, 10),
 									lives: parseInt(this.newGameHitpoints, 10),
-									bombs: parseInt(this.newGameBombs, 10),
+									trap: parseInt(this.newGameTraps, 10),
+									bomb: parseInt(this.newGameBombs, 10),
 									bombTimer: parseInt(this.newGameBombTimer, 10),
 									enemiesDelay: parseInt(this.newGameEnemiesDelay, 10)
 								}

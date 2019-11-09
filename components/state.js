@@ -17,6 +17,7 @@ export const advanceRound = (state, action) => {
 			action.boardHeight,
 			action.bomb,
 			action.bombTimer,
+			action.trap,
 			action.lives,
 			action.enemiesDelay
 		);
@@ -36,7 +37,12 @@ function moveEnemies(state) {
 		if (s.board[i].occupant === entities.ENEMY) {
 			s.board[i].occupant = entities.EMPTY;
 			if (i + s.boardWidth < s.board.length) {
-				s.board[i + s.boardWidth] = { occupant: entities.ENEMY };
+				if (s.board[i + s.boardWidth].occupant === entities.TRAP) {
+					s.board[i + s.boardWidth] = { occupant: entities.EXPLOSION };
+					s.events = [...s.events, actions.EXPLOSION];
+				} else {
+					s.board[i + s.boardWidth] = { occupant: entities.ENEMY };
+				}
 			} else {
 				console.log('ENEMY HIT HOMEBASE');
 				s.lives--;
@@ -216,10 +222,10 @@ function addRound(state) {
 
 export const getFreshState = (
 	boardWidth = 5,
-	boardHeight = 5,
+	boardHeight = 6,
 	bomb = 3,
 	bombTimer = 3,
-	trap = 3,
+	trap = 1,
 	lives = 3,
 	enemiesDelay = 1
 ) => ({
