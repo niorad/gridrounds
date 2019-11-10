@@ -22,23 +22,23 @@ class App extends LitElement {
 	onAdvanceRound(action) {
 		this.state = advanceRound(this.state, action);
 
-		if (this.state.events.indexOf(actions.EXPLOSION) >= 0) {
-			const explosion = new Audio('./explosion.wav');
-			explosion.play();
-		}
+		// if (this.state.events.indexOf(actions.EXPLOSION) >= 0) {
+		// 	const explosion = new Audio('./explosion.wav');
+		// 	explosion.play();
+		// }
 
-		if (this.state.events.indexOf(actions.DROP_ITEM) >= 0) {
-			const fuse = new Audio('./fuse.wav');
-			fuse.play();
-		}
+		// if (this.state.events.indexOf(actions.DROP_ITEM) >= 0) {
+		// 	const fuse = new Audio('./fuse.wav');
+		// 	fuse.play();
+		// }
 
-		if (this.state.events.indexOf(actions.LOST_HP) >= 0) {
-			const hit = new Audio('./hit.wav');
-			hit.play();
-		}
+		// if (this.state.events.indexOf(actions.LOST_HP) >= 0) {
+		// 	const hit = new Audio('./hit.wav');
+		// 	hit.play();
+		// }
 
-		const blip = new Audio('./blip.wav');
-		blip.play();
+		// const blip = new Audio('./blip.wav');
+		// blip.play();
 	}
 
 	onFieldClicked(position) {
@@ -225,8 +225,8 @@ class App extends LitElement {
 															this.onFieldClicked(index);
 														}}
 														@mouseenter=${() => {
-															const hoverSound = new Audio('./hover.wav');
-															hoverSound.play();
+															// const hoverSound = new Audio('./hover.wav');
+															// hoverSound.play();
 														}}
 													>
 														<div
