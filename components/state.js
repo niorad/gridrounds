@@ -55,7 +55,14 @@ function moveEnemies(state) {
 
 function addEnemies(state) {
 	const s = { ...state };
-	if (s.round % state.enemiesDelay === 0) {
+	if (state.enemiesDelay < 0) {
+		const ct = Math.abs(state.enemiesDelay);
+		for (let i = 0; i < ct; i++) {
+			s.board[Math.floor(Math.random() * s.boardWidth)] = {
+				occupant: entities.ENEMY
+			};
+		}
+	} else if (s.round % state.enemiesDelay === 0) {
 		s.board[Math.floor(Math.random() * s.boardWidth)] = {
 			occupant: entities.ENEMY
 		};

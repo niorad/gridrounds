@@ -26,6 +26,7 @@ class App extends LitElement {
 			const explosion = new Audio('./explosion.wav');
 			explosion.play();
 		}
+
 		if (this.state.events.indexOf(actions.DROP_ITEM) >= 0) {
 			const fuse = new Audio('./fuse.wav');
 			fuse.play();
