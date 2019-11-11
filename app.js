@@ -4,6 +4,7 @@ import entities from './components/entities.js';
 import actions from './components/actions.js';
 import gamestates from './components/gamestates.js';
 import './components/menu.js';
+import './components/cell.js';
 
 class App extends LitElement {
 	constructor() {
@@ -21,24 +22,6 @@ class App extends LitElement {
 
 	onAdvanceRound(action) {
 		this.state = advanceRound(this.state, action);
-
-		// if (this.state.events.indexOf(actions.EXPLOSION) >= 0) {
-		// 	const explosion = new Audio('./explosion.wav');
-		// 	explosion.play();
-		// }
-
-		// if (this.state.events.indexOf(actions.DROP_ITEM) >= 0) {
-		// 	const fuse = new Audio('./fuse.wav');
-		// 	fuse.play();
-		// }
-
-		// if (this.state.events.indexOf(actions.LOST_HP) >= 0) {
-		// 	const hit = new Audio('./hit.wav');
-		// 	hit.play();
-		// }
-
-		// const blip = new Audio('./blip.wav');
-		// blip.play();
 	}
 
 	onFieldClicked(position) {
@@ -51,23 +34,6 @@ class App extends LitElement {
 
 	static get styles() {
 		return css`
-			@keyframes explode {
-				0% {
-					transform: scale(0.2);
-				}
-				100% {
-					transform: scale(1.2);
-				}
-			}
-			@keyframes moveDown {
-				0% {
-					transform: translateY(-20px);
-				}
-				100% {
-					transform: translateY(0);
-				}
-			}
-
 			main {
 				max-width: 400px;
 				margin: auto;
@@ -96,57 +62,7 @@ class App extends LitElement {
 				width: 100%;
 				grid-gap: 5px;
 			}
-			li {
-				text-align: center;
-				position: relative;
-			}
-			li small {
-				font-size: 12px;
-				position: absolute;
-				right: 5px;
-				bottom: 3px;
-			}
-			li .square {
-				width: 100%;
-				padding-top: 100%;
-				position: relative;
-			}
-			li button {
-				font-size: 2.4rem;
-				margin: 0;
-				width: 100%;
-				max-width: 100%;
-				padding: 0;
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				outline: 1px dashed #d35400;
-				outline-offset: -3px;
-			}
-			li button:not([disabled]):hover {
-				cursor: pointer;
-				outline: 2px dashed #d35400;
-			}
 
-			li button[disabled] {
-				color: black;
-				outline: transparent;
-			}
-			li button .explosion {
-				animation-name: explode;
-				animation-duration: 0.5s;
-				/* animation-fill-mode: both; */
-				animation-iteration-count: infinite;
-				animation-timing-function: ease-out;
-			}
-			li button .enemy {
-				animation-name: moveDown;
-				animation-duration: 0.2s;
-				animation-fill-mode: both;
-				animation-timing-function: ease-in-out;
-			}
 			button {
 				font-size: 13px;
 				background: #2c3e50;
@@ -215,33 +131,17 @@ class App extends LitElement {
 								<ul style=${`grid-template-columns: ${'1fr '.repeat(this.state.boardWidth)}`}>
 									${this.state.board.map((cell, index) => {
 										return html`
-											<li>
-												<div class="square">
-													<button
-														?disabled=${cell.occupant !== entities.EMPTY ||
-															chosenItemRemaining === 0 ||
-															this.state.gameState === gamestates.LOST}
-														@click=${e => {
-															this.onFieldClicked(index);
-														}}
-														@mouseenter=${() => {
-															// const hoverSound = new Audio('./hover.wav');
-															// hoverSound.play();
-														}}
-													>
-														<div
-															class=${cell.occupant === entities.EXPLOSION
-																? 'explosion'
-																: cell.occupant === entities.ENEMY
-																? 'enemy'
-																: ''}
-														>
-															${cell.occupant}
-														</div>
-													</button>
-													<small>${cell.timer}</small>
-												</div>
-											</li>
+											<gridrounds-cell
+												.entity=${cell.occupant}
+												.position=${index}
+												.disabled=${cell.occupant !== entities.EMPTY ||
+													chosenItemRemaining === 0 ||
+													this.state.gameState === gamestates.LOST}
+												@cell-clicked=${e => {
+													console.log(e);
+													this.onFieldClicked(e.detail);
+												}}
+											></gridrounds-cell>
 										`;
 									})}
 								</ul>
