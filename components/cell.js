@@ -4,9 +4,7 @@ import entities from './entities.js';
 class Cell extends LitElement {
 	constructor() {
 		super();
-		setTimeout(() => {
-			this.rerender = false;
-		}, 100);
+		this.visible = true;
 	}
 
 	static get properties() {
@@ -14,8 +12,17 @@ class Cell extends LitElement {
 			entity: { type: Object },
 			timer: { type: Number },
 			position: { type: Number },
-			disabled: { type: Boolean }
+			disabled: { type: Boolean },
+			animatedClass: { type: String }
 		};
+	}
+
+	flicker() {
+		this.animatedClass = 'not-animated';
+		console.log('GOT FLICKED');
+		setTimeout(() => {
+			this.animatedClass = 'animated';
+		}, 0);
 	}
 
 	static get styles() {
@@ -89,7 +96,9 @@ class Cell extends LitElement {
 						transform: translateY(0);
 					}
 				}
-
+				li.not-animated button div {
+					opacity: 0;
+				}
 				li.animated button .explosion {
 					animation-name: explode-${dateNow};
 					animation-duration: 0.3s;
@@ -105,7 +114,7 @@ class Cell extends LitElement {
 				}
 			</style>
 
-			<li class="animated" }>
+			<li class=${this.animatedClass} }>
 				<div class="square">
 					<button
 						?disabled=${this.disabled}

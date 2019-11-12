@@ -22,6 +22,12 @@ class App extends LitElement {
 
 	onAdvanceRound(action) {
 		this.state = advanceRound(this.state, action);
+		if (action.type !== actions.DROP_ITEM) {
+			const cells = this.shadowRoot.querySelectorAll('gridrounds-cell');
+			for (let i = 0; i < cells.length; i++) {
+				cells[i].flicker();
+			}
+		}
 	}
 
 	onFieldClicked(position) {
@@ -104,6 +110,23 @@ class App extends LitElement {
 		const chosenItemRemaining =
 			this.chosenItem === entities.BOMB ? this.state.bomb - bombCount : this.state.trap - trapCount;
 
+		const cells = this.state.board.map((cell, index) => {
+			return html`
+				<gridrounds-cell
+					.entity=${cell.occupant}
+					.position=${index}
+					.timer=${cell.timer}
+					.disabled=${cell.occupant !== entities.EMPTY ||
+						chosenItemRemaining === 0 ||
+						this.state.gameState === gamestates.LOST}
+					@cell-clicked=${e => {
+						console.log(e);
+						this.onFieldClicked(e.detail);
+					}}
+				></gridrounds-cell>
+			`;
+		});
+
 		return html`
 			<main>
 				${this.state.gameState !== gamestates.LOST
@@ -129,21 +152,7 @@ class App extends LitElement {
 									</div>
 								</div>
 								<ul style=${`grid-template-columns: ${'1fr '.repeat(this.state.boardWidth)}`}>
-									${this.state.board.map((cell, index) => {
-										return html`
-											<gridrounds-cell
-												.entity=${cell.occupant}
-												.position=${index}
-												.disabled=${cell.occupant !== entities.EMPTY ||
-													chosenItemRemaining === 0 ||
-													this.state.gameState === gamestates.LOST}
-												@cell-clicked=${e => {
-													console.log(e);
-													this.onFieldClicked(e.detail);
-												}}
-											></gridrounds-cell>
-										`;
-									})}
+									${cells}
 								</ul>
 								<div class="status">
 									<div class="status-item">
