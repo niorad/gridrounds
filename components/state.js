@@ -38,7 +38,10 @@ function moveEnemies(state) {
 			s.board[i].occupant = entities.EMPTY;
 			if (i + s.boardWidth < s.board.length) {
 				if (s.board[i + s.boardWidth].occupant === entities.TRAP) {
-					s.board[i + s.boardWidth] = { occupant: entities.EXPLOSION };
+					s.board[i + s.boardWidth] = {
+						occupant: entities.EXPLOSION,
+						killedEnemy: s.board[i + s.boardWidth] === entities.ENEMY
+					};
 					s.events = [...s.events, actions.EXPLOSION];
 				} else {
 					s.board[i + s.boardWidth] = { occupant: entities.ENEMY };
@@ -140,7 +143,8 @@ function explodeBombs(state) {
 			if (t >= 0) {
 				if (s.board[t].occupant !== entities.BOMB) {
 					s.board[t] = {
-						occupant: entities.EXPLOSION
+						occupant: entities.EXPLOSION,
+						killedEnemy: s.board[t].occupant === entities.ENEMY
 					};
 				} else {
 					s.board[t].timer = -1;
@@ -157,7 +161,7 @@ function explodeBombs(state) {
 			// has tile to the right
 			if (r % s.boardWidth !== 0) {
 				if (s.board[r].occupant !== entities.BOMB) {
-					s.board[r] = { occupant: entities.EXPLOSION };
+					s.board[r] = { occupant: entities.EXPLOSION, killedEnemy: s.board[r].occupant === entities.ENEMY };
 				} else {
 					s.board[r].timer = -1;
 				}
@@ -174,7 +178,8 @@ function explodeBombs(state) {
 			if (b < s.board.length) {
 				if (s.board[b].occupant !== entities.BOMB) {
 					s.board[b] = {
-						occupant: entities.EXPLOSION
+						occupant: entities.EXPLOSION,
+						killedEnemy: s.board[b].occupant === entities.ENEMY
 					};
 				} else {
 					s.board[b].timer = -1;
@@ -189,11 +194,11 @@ function explodeBombs(state) {
 			}
 
 			// has tile to the left
-			if ((i - 1) % s.boardWidth !== s.boardWidth - 1) {
-				if (s.board[i - 1].occupant !== entities.BOMB) {
-					s.board[i - 1] = { occupant: entities.EXPLOSION };
+			if (l % s.boardWidth !== s.boardWidth - 1) {
+				if (s.board[l].occupant !== entities.BOMB) {
+					s.board[l] = { occupant: entities.EXPLOSION, killedEnemy: s.board[l].occupant === entities.ENEMY };
 				} else {
-					s.board[i - 1].timer = -1;
+					s.board[l].timer = -1;
 				}
 			}
 

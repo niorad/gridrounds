@@ -116,6 +116,7 @@ class App extends LitElement {
 					.entity=${cell.occupant}
 					.position=${index}
 					.timer=${cell.timer}
+					.killedEnemy=${cell.killedEnemy ? true : false}
 					.disabled=${cell.occupant !== entities.EMPTY ||
 						chosenItemRemaining === 0 ||
 						this.state.gameState === gamestates.LOST}

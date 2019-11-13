@@ -12,6 +12,7 @@ class Cell extends LitElement {
 			entity: { type: Object },
 			timer: { type: Number },
 			position: { type: Number },
+			killedEnemy: { type: Boolean },
 			disabled: { type: Boolean },
 			animatedClass: { type: String }
 		};
@@ -27,6 +28,76 @@ class Cell extends LitElement {
 
 	static get styles() {
 		return css`
+			@keyframes explode {
+				0% {
+					transform: scale(0.2);
+				}
+				100% {
+					transform: scale(1.2);
+				}
+			}
+			@keyframes move-and-die {
+				0% {
+					transform: translateY(-80px) scale(1);
+				}
+				20% {
+					transform: translateY(-40px) scale(1.5);
+				}
+				50% {
+					transform: translateY(0) scale(1);
+					opacity: 1;
+				}
+				100% {
+					transform: translateY(0) scale(2);
+					opacity: 0;
+				}
+			}
+			@keyframes moveDown {
+				0% {
+					transform: translateY(-80px) scale(1);
+				}
+				50% {
+					transform: translateY(-40px) scale(1.5);
+				}
+				100% {
+					transform: translateY(0) scale(1);
+				}
+			}
+			li.not-animated button div {
+				opacity: 0;
+			}
+			li.animated button .explosion {
+				animation-name: explode;
+				animation-duration: 0.3s;
+				animation-iteration-count: infinite;
+				animation-timing-function: ease-out;
+				animation-delay: 0.5s;
+			}
+			li.animated button .enemy {
+				animation-name: moveDown;
+				animation-duration: 0.5s;
+				animation-fill-mode: both;
+				animation-timing-function: ease-in-out;
+			}
+			li.animated button .enemy-killed {
+				animation-name: move-and-die;
+				animation-duration: 1s;
+				animation-fill-mode: both;
+				animation-timing-function: ease-in-out;
+			}
+			.enemy-killed,
+			.enemy,
+			.explosion {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				line-height: 1.6;
+			}
+			.explosion {
+				transform: scale(0);
+			}
 			li {
 				text-align: center;
 				position: relative;
@@ -77,43 +148,7 @@ class Cell extends LitElement {
 	}
 
 	render() {
-		const dateNow = Date.now();
 		return html`
-			<style>
-				@keyframes explode-${dateNow} {
-					0% {
-						transform: scale(0.2);
-					}
-					100% {
-						transform: scale(1.2);
-					}
-				}
-				@keyframes moveDown-${dateNow} {
-					0% {
-						transform: translateY(-50px);
-					}
-					100% {
-						transform: translateY(0);
-					}
-				}
-				li.not-animated button div {
-					opacity: 0;
-				}
-				li.animated button .explosion {
-					animation-name: explode-${dateNow};
-					animation-duration: 0.3s;
-					animation-iteration-count: infinite;
-					animation-timing-function: ease-out;
-					animation-delay: ${Math.random() / 4}s;
-				}
-				li.animated button .enemy {
-					animation-name: moveDown-${dateNow};
-					animation-duration: 0.3s;
-					animation-fill-mode: both;
-					animation-timing-function: ease-in-out;
-				}
-			</style>
-
 			<li class=${this.animatedClass} }>
 				<div class="square">
 					<button
@@ -135,6 +170,11 @@ class Cell extends LitElement {
 						>
 							${this.entity}
 						</div>
+						${this.killedEnemy
+							? html`
+									<div class="enemy-killed">${entities.ENEMY}</div>
+							  `
+							: null}
 					</button>
 					<small>${this.timer}</small>
 				</div>
