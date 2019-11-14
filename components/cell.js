@@ -13,6 +13,7 @@ class Cell extends LitElement {
 			timer: { type: Number },
 			position: { type: Number },
 			killedEnemy: { type: Boolean },
+			bombExploded: { type: Boolean },
 			disabled: { type: Boolean },
 			animatedClass: { type: String }
 		};
@@ -36,11 +37,21 @@ class Cell extends LitElement {
 					transform: scale(1.2);
 				}
 			}
+			@keyframes go-off {
+				0% {
+					transform: scale(1) rotate(0);
+					opacity: 1;
+				}
+				100% {
+					transform: scale(2) rotate(10deg);
+					opacity: 0;
+				}
+			}
 			@keyframes move-and-die {
 				0% {
 					transform: translateY(-80px) scale(1);
 				}
-				20% {
+				25% {
 					transform: translateY(-40px) scale(1.5);
 				}
 				50% {
@@ -71,7 +82,7 @@ class Cell extends LitElement {
 				animation-duration: 0.3s;
 				animation-iteration-count: infinite;
 				animation-timing-function: ease-out;
-				animation-delay: 0.5s;
+				animation-delay: 0.6s;
 			}
 			li.animated button .enemy {
 				animation-name: moveDown;
@@ -85,8 +96,16 @@ class Cell extends LitElement {
 				animation-fill-mode: both;
 				animation-timing-function: ease-in-out;
 			}
+			li.animated button .bomb-exploded {
+				animation-name: go-off;
+				animation-duration: 0.5s;
+				animation-fill-mode: both;
+				animation-timing-function: ease-out;
+				animation-delay: 0.6s;
+			}
 			.enemy-killed,
 			.enemy,
+			.bomb-exploded,
 			.explosion {
 				position: absolute;
 				top: 0;
@@ -173,6 +192,11 @@ class Cell extends LitElement {
 						${this.killedEnemy
 							? html`
 									<div class="enemy-killed">${entities.ENEMY}</div>
+							  `
+							: null}
+						${this.bombExploded
+							? html`
+									<div class="bomb-exploded">${entities.BOMB}</div>
 							  `
 							: null}
 					</button>

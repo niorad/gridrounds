@@ -127,7 +127,7 @@ function explodeBombs(state) {
 
 	for (let i = 0; i < s.board.length; i++) {
 		if (s.board[i].occupant === entities.BOMB && s.board[i].timer <= 0) {
-			s.board[i] = { occupant: entities.EXPLOSION };
+			s.board[i] = { occupant: entities.EXPLOSION, bombExploded: true };
 			s.events = [...s.events, actions.EXPLOSION];
 
 			const t = i - s.boardWidth;
