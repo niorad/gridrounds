@@ -77,6 +77,9 @@ class Cell extends LitElement {
 			li.not-animated button div {
 				opacity: 0;
 			}
+			li button div {
+				pointer-events: none;
+			}
 			li.animated button .explosion {
 				animation-name: explode;
 				animation-duration: 0.3s;
@@ -112,7 +115,7 @@ class Cell extends LitElement {
 				left: 0;
 				right: 0;
 				bottom: 0;
-				line-height: 1.6;
+				line-height: 2;
 			}
 			.explosion {
 				transform: scale(0);
@@ -200,7 +203,11 @@ class Cell extends LitElement {
 							  `
 							: null}
 					</button>
-					<small>${this.timer}</small>
+					${this.timer && this.timer > -1
+						? html`
+								<small>${this.timer}</small>
+						  `
+						: null}
 				</div>
 			</li>
 		`;

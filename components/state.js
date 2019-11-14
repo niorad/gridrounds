@@ -141,7 +141,7 @@ function explodeBombs(state) {
 
 			// has tile to the top
 			if (t >= 0) {
-				if (s.board[t].occupant !== entities.BOMB) {
+				if (notBombOrExplosion(s.board[t])) {
 					s.board[t] = {
 						occupant: entities.EXPLOSION,
 						killedEnemy: s.board[t].occupant === entities.ENEMY
@@ -160,7 +160,7 @@ function explodeBombs(state) {
 
 			// has tile to the right
 			if (r % s.boardWidth !== 0) {
-				if (s.board[r].occupant !== entities.BOMB) {
+				if (notBombOrExplosion(s.board[r])) {
 					s.board[r] = { occupant: entities.EXPLOSION, killedEnemy: s.board[r].occupant === entities.ENEMY };
 				} else {
 					s.board[r].timer = -1;
@@ -176,7 +176,7 @@ function explodeBombs(state) {
 
 			// has tile to the bottom
 			if (b < s.board.length) {
-				if (s.board[b].occupant !== entities.BOMB) {
+				if (notBombOrExplosion(s.board[b])) {
 					s.board[b] = {
 						occupant: entities.EXPLOSION,
 						killedEnemy: s.board[b].occupant === entities.ENEMY
@@ -195,7 +195,7 @@ function explodeBombs(state) {
 
 			// has tile to the left
 			if (l % s.boardWidth !== s.boardWidth - 1) {
-				if (s.board[l].occupant !== entities.BOMB) {
+				if (notBombOrExplosion(s.board[l])) {
 					s.board[l] = { occupant: entities.EXPLOSION, killedEnemy: s.board[l].occupant === entities.ENEMY };
 				} else {
 					s.board[l].timer = -1;
@@ -224,6 +224,10 @@ function cleanUpExplosions(state) {
 		}
 	}
 	return s;
+}
+
+function notBombOrExplosion(cell) {
+	return cell.occupant !== entities.BOMB && cell.occupant !== entities.EXPLOSION;
 }
 
 function addRound(state) {
